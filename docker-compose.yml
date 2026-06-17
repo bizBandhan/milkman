@@ -1,0 +1,15 @@
+services:
+  frontend:
+    image: vite-app
+    build:
+      context: ./codebase/frontend
+      dockerfile: Dockerfile
+      target: development
+    volumes:
+      - ./codebase/frontend/src:/app/src:ro
+      - ./codebase/frontend/public:/app/public:ro
+      - ./codebase/frontend/package.json:/app/package.json
+    networks:
+      - bizbandhan-milkman
+networks:
+  bizbandhan-milkman:
