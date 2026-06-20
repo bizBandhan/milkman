@@ -1,4 +1,27 @@
 services:
+  db: 
+    image: mongo
+    restart: unless-stopped
+    volumes:
+      - ./db/store:/data/db
+      - ./db/backup:/backup
+      - ./db/config:/data/config
+    networks:
+      - bizbandhan-milkman
+  backend: 
+    image: bizbandhan-milkman     
+    build:
+      context: codebase/backend
+      target: development
+    networks:
+      - bizbandhan-milkman
+    env_file:
+      - ./environment/backend.env
+    volumes:
+      - ./codebase/backend/core:/app/core:ro
+      - ./codebase/backend/modules:/app/modules:ro
+      - ./codebase/backend/package.json:/app/package.json
+      - ./codebase/backend/public:/app/public
   frontend:
     image: vite-app
     build:
@@ -9,6 +32,24 @@ services:
       - ./codebase/frontend/src:/app/src:ro
       - ./codebase/frontend/public:/app/public:ro
       - ./codebase/frontend/package.json:/app/package.json
+    networks:
+      - bizbandhan-milkman
+  bizbandhan-milkman: 
+    image: optiwariindia/gateway:1.0.0
+    restart: unless-stopped
+    networks:
+      - publicweb
+      - bizbandhan-milkman
+    volumes:
+      - ./codebase/gateway/config:/etc/nginx/http.d:ro
+      - ./codebase/gateway/logs:/data/logs
+    dns:
+      - 8.8.8.8
+  pravah: 
+    image: optiwariindia/pravah-go:1.0.0
+    restart: unless-stopped
+    env_file:
+      - environment/pravah.env
     networks:
       - bizbandhan-milkman
 networks:
