@@ -9,7 +9,7 @@ services:
     networks:
       - bizbandhan-milkman
   backend: 
-    image: bizbandhan-milkman     
+    image: bizbandhan-milkman
     build:
       context: codebase/backend
       target: development
@@ -54,3 +54,5 @@ services:
       - bizbandhan-milkman
 networks:
   bizbandhan-milkman:
+  publicweb:
+    external: true

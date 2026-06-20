@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon core/server.js",
+    "start": "node core/server.js",
+    "prod": "node core/server.js"
   },
   "keywords": [],
   "author": "Om Prakash Tiwari <optiwari.india@gmail.com>",
@@ -19,5 +21,8 @@
     "express-web-tools": "^1.0.17",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.7.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
   }
 }
