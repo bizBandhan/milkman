@@ -21,6 +21,7 @@ import {
   WifiOff,
   X,
 } from 'lucide-react'
+import { usePravah, usePravahListener } from "pravah-sdk"
 import './App.css'
 
 const AUTH_PROFILE_KEY = 'milkman-auth-profile'
@@ -360,13 +361,13 @@ function Dashboard({ profile, accessToken, onLogout, onGoHome }) {
   return (
     <div className="dashboard-shell">
       <header className="dashboard-topbar">
-        <button className="dashboard-icon-button" type="button" onClick={onGoHome} aria-label="Back to landing">
-          <ArrowLeft size={18} />
+        <button className="dashboard-icon-button" type="button" onClick={ onGoHome } aria-label="Back to landing">
+          <ArrowLeft size={ 18 } />
         </button>
 
         <div className="brand dashboard-brand">
           <div className="brand-mark">
-            <Milk size={20} strokeWidth={2.2} />
+            <Milk size={ 20 } strokeWidth={ 2.2 } />
           </div>
           <div>
             <p className="eyebrow">BizBandhan</p>
@@ -374,66 +375,66 @@ function Dashboard({ profile, accessToken, onLogout, onGoHome }) {
           </div>
         </div>
 
-        <button className="dashboard-icon-button" type="button" onClick={onLogout} aria-label="Logout">
-          <LogOut size={18} />
+        <button className="dashboard-icon-button" type="button" onClick={ onLogout } aria-label="Logout">
+          <LogOut size={ 18 } />
         </button>
       </header>
 
-      {!selectedCustomer ? (
+      { !selectedCustomer ? (
         <section className="dashboard-date-strip" aria-label="Selected delivery date">
-          <button className="date-button desktop-date-nav" type="button" onClick={() => shiftDate(-1)}>
-            <ArrowLeft size={18} />
+          <button className="date-button desktop-date-nav" type="button" onClick={ () => shiftDate(-1) }>
+            <ArrowLeft size={ 18 } />
           </button>
           <div className="dashboard-date-center">
             <p className="eyebrow">Delivery date</p>
-            <h3>{formatDashboardDate(selectedDate)}</h3>
+            <h3>{ formatDashboardDate(selectedDate) }</h3>
           </div>
-          <button className="date-button desktop-date-nav" type="button" onClick={() => shiftDate(1)}>
-            <ArrowRight size={18} />
+          <button className="date-button desktop-date-nav" type="button" onClick={ () => shiftDate(1) }>
+            <ArrowRight size={ 18 } />
           </button>
         </section>
-      ) : null}
+      ) : null }
 
       <main className="dashboard-main">
-        {selectedCustomer ? (
+        { selectedCustomer ? (
           <section className="dashboard-card customer-detail-view">
             <div className="customer-detail-head">
               <div>
                 <p className="eyebrow">Customer view</p>
-                <h2>{selectedCustomer.familyName}</h2>
+                <h2>{ selectedCustomer.familyName }</h2>
               </div>
-              <button className="button button-secondary customer-back-button" type="button" onClick={() => setSelectedCustomer(null)}>
-                <ArrowLeft size={18} />
+              <button className="button button-secondary customer-back-button" type="button" onClick={ () => setSelectedCustomer(null) }>
+                <ArrowLeft size={ 18 } />
                 Back to deliveries
               </button>
             </div>
 
             <div className="dashboard-date-strip customer-month-strip">
-              <button className="date-button" type="button" onClick={() => shiftCustomerMonth(-1)}>
-                <ArrowLeft size={18} />
+              <button className="date-button" type="button" onClick={ () => shiftCustomerMonth(-1) }>
+                <ArrowLeft size={ 18 } />
               </button>
               <div className="dashboard-date-center">
                 <p className="eyebrow">Selected month</p>
-                <h3>{formatMonthLabel(selectedCustomerMonth)}</h3>
+                <h3>{ formatMonthLabel(selectedCustomerMonth) }</h3>
               </div>
-              <button className="date-button" type="button" onClick={() => shiftCustomerMonth(1)}>
-                <ArrowRight size={18} />
+              <button className="date-button" type="button" onClick={ () => shiftCustomerMonth(1) }>
+                <ArrowRight size={ 18 } />
               </button>
             </div>
 
             <div className="customer-summary-grid">
               <article className="dashboard-card summary-card">
                 <p className="eyebrow">Delivered quantity</p>
-                <h3>{formatLitres(deliveredTotal)}</h3>
+                <h3>{ formatLitres(deliveredTotal) }</h3>
               </article>
               <article className="dashboard-card summary-card">
                 <p className="eyebrow">Pending payment</p>
-                <h3>{formatCurrency(pendingPayment)}</h3>
+                <h3>{ formatCurrency(pendingPayment) }</h3>
               </article>
               <article className="dashboard-card summary-card">
                 <p className="eyebrow">Last payment</p>
-                <h3>{formatCurrency(selectedCustomer.lastPayment.amount)}</h3>
-                <p>{selectedCustomer.lastPayment.date}</p>
+                <h3>{ formatCurrency(selectedCustomer.lastPayment.amount) }</h3>
+                <p>{ selectedCustomer.lastPayment.date }</p>
               </article>
             </div>
 
@@ -442,247 +443,246 @@ function Dashboard({ profile, accessToken, onLogout, onGoHome }) {
               <div className="last-action-content">
                 <div>
                   <strong>Most recent note</strong>
-                  <p>{selectedCustomer.lastUpdate}</p>
+                  <p>{ selectedCustomer.lastUpdate }</p>
                 </div>
-                <NotebookTabs size={18} />
+                <NotebookTabs size={ 18 } />
               </div>
             </div>
 
             <div className="customer-calendar">
               <div className="customer-calendar-head">
-                {weekdayLabels.map((label) => (
-                  <span key={label}>{label}</span>
-                ))}
+                { weekdayLabels.map((label) => (
+                  <span key={ label }>{ label }</span>
+                )) }
               </div>
 
               <div className="customer-calendar-grid">
-                {calendarCells.map((cell) =>
+                { calendarCells.map((cell) =>
                   cell.isEmpty ? (
-                    <div className="calendar-cell calendar-cell-empty" key={cell.id} />
+                    <div className="calendar-cell calendar-cell-empty" key={ cell.id } />
                   ) : (
                     <article
-                      className={`calendar-cell ${cell.delivery ? 'calendar-cell-active' : ''} ${
-                        cell.isToday ? 'calendar-cell-today' : ''
-                      }`}
-                      key={cell.id}
+                      className={ `calendar-cell ${cell.delivery ? 'calendar-cell-active' : ''} ${cell.isToday ? 'calendar-cell-today' : ''
+                        }` }
+                      key={ cell.id }
                     >
                       <div className="calendar-cell-top">
-                        <strong>{cell.day}</strong>
-                        {cell.delivery ? (
-                          <span className={`history-status status-${cell.delivery.status.toLowerCase()}`}>
-                            {cell.delivery.status}
+                        <strong>{ cell.day }</strong>
+                        { cell.delivery ? (
+                          <span className={ `history-status status-${cell.delivery.status.toLowerCase()}` }>
+                            { cell.delivery.status }
                           </span>
-                        ) : null}
+                        ) : null }
                       </div>
 
-                      {cell.delivery ? (
+                      { cell.delivery ? (
                         <div className="calendar-cell-body">
-                          <p>{formatLitres(cell.delivery.quantity)}</p>
-                          <small>{cell.delivery.date}</small>
+                          <p>{ formatLitres(cell.delivery.quantity) }</p>
+                          <small>{ cell.delivery.date }</small>
                         </div>
                       ) : (
                         <div className="calendar-cell-body calendar-cell-body-empty">
                           <p>No delivery</p>
                         </div>
-                      )}
+                      ) }
                     </article>
                   ),
-                )}
+                ) }
               </div>
             </div>
           </section>
         ) : (
           <>
-        <section className="dashboard-hero">
-          <div>
-            <p className="hero-kicker">Delivery view</p>
-            <h1>Morning run for {profile.name}.</h1>
-            <p className="hero-text">
-              Start with the active queue, mark delivery outcomes fast, and keep the latest action visible
-              before it settles into today&apos;s completed list.
-            </p>
-          </div>
-          <div className="dashboard-chip">
-            <BadgeCheck size={18} />
-            <span>{profile.role === 'milkman' ? 'Milk vendor account' : 'Customer account'}</span>
-          </div>
-        </section>
-
-        <section className="dashboard-card delivery-board">
-          {deliveryState.lastAction ? (
-            <div className="last-action-buffer">
-              <p className="eyebrow">Latest update</p>
-              <div className="last-action-content">
-                <div>
-                  <strong>{deliveryState.lastAction.familyName}</strong>
-                  <p>
-                    {deliveryState.lastAction.status}
-                    {deliveryState.lastAction.extraLitres
-                      ? ` · ${formatLitres(deliveryState.lastAction.extraLitres)} extra`
-                      : ''}
-                  </p>
-                </div>
-                <span>{deliveryState.lastAction.deliveredAt}</span>
+            <section className="dashboard-hero">
+              <div>
+                <p className="hero-kicker">Delivery view</p>
+                <h1>Morning run for { profile.name }.</h1>
+                <p className="hero-text">
+                  Start with the active queue, mark delivery outcomes fast, and keep the latest action visible
+                  before it settles into today&apos;s completed list.
+                </p>
               </div>
-            </div>
-          ) : null}
-
-          <div className="delivery-columns">
-            <div className="delivery-column">
-              <div className="column-head">
-                <div>
-                  <p className="eyebrow">Pending customers</p>
-                  <h4>{deliveryState.pending.length} stops left</h4>
-                </div>
+              <div className="dashboard-chip">
+                <BadgeCheck size={ 18 } />
+                <span>{ profile.role === 'milkman' ? 'Milk vendor account' : 'Customer account' }</span>
               </div>
+            </section>
 
-              <div className="delivery-list">
-                {deliveryState.pending.map((item) => (
-                  <article className="delivery-item" key={item.id}>
-                    <div className="delivery-main">
-                      <button className="action-button action-view inline-view-button" type="button" onClick={() => openCustomerView(item.familyName)}>
-                        <Eye size={16} />
-                      </button>
-                      <div>
-                      <strong>{item.familyName}</strong>
-                      <p>{formatLitres(item.amountLitres)}</p>
-                      </div>
-                    </div>
-                    <div className="delivery-actions">
-                      <button
-                        className="action-button action-delivered"
-                        type="button"
-                        onClick={() => markDelivery(item, 'Delivered')}
-                      >
-                        Delivered
-                      </button>
-                      <button
-                        className="action-button action-absent"
-                        type="button"
-                        onClick={() => markDelivery(item, 'Absent')}
-                      >
-                        Absent
-                      </button>
-                      <button
-                        className="action-button action-extra"
-                        type="button"
-                        onClick={() => openExtraModal(item)}
-                      >
-                        <Plus size={16} />
-                        Extra
-                      </button>
-                    </div>
-                  </article>
-                ))}
-
-                {deliveryState.pending.length === 0 ? (
-                  <div className="empty-delivery-state">
-                    <p>All pending customers are marked for this date.</p>
-                  </div>
-                ) : null}
-              </div>
-            </div>
-
-            <div className="delivery-column delivery-history">
-              <div className="column-head">
-                <div>
-                  <p className="eyebrow">Completed today</p>
-                  <h4>{deliveryState.completed.length} records</h4>
-                </div>
-              </div>
-
-              <div className="delivery-history-list">
-                {deliveryState.completed.map((item) => (
-                  <article className="history-item" key={`${item.id}-${item.deliveredAt}`}>
+            <section className="dashboard-card delivery-board">
+              { deliveryState.lastAction ? (
+                <div className="last-action-buffer">
+                  <p className="eyebrow">Latest update</p>
+                  <div className="last-action-content">
                     <div>
-                      <div className="history-name-row">
-                        <button className="action-button action-view compact-view-button" type="button" onClick={() => openCustomerView(item.familyName)}>
-                          <Eye size={16} />
-                        </button>
-                        <div>
-                          <strong>{item.familyName}</strong>
-                          <p>
-                            {item.status}
-                            {item.extraLitres ? ` · ${formatLitres(item.extraLitres)} extra` : ''}
-                          </p>
-                        </div>
-                      </div>
+                      <strong>{ deliveryState.lastAction.familyName }</strong>
+                      <p>
+                        { deliveryState.lastAction.status }
+                        { deliveryState.lastAction.extraLitres
+                          ? ` · ${formatLitres(deliveryState.lastAction.extraLitres)} extra`
+                          : '' }
+                      </p>
                     </div>
-                    <div className="history-side">
-                      <span>{item.deliveredAt}</span>
-                    </div>
-                  </article>
-                ))}
-
-                {deliveryState.completed.length === 0 ? (
-                  <div className="empty-delivery-state">
-                    <p>Completed records for the date will accumulate here.</p>
+                    <span>{ deliveryState.lastAction.deliveredAt }</span>
                   </div>
-                ) : null}
-              </div>
-            </div>
-          </div>
-        </section>
+                </div>
+              ) : null }
 
-        <section className="dashboard-grid">
-          <article className="dashboard-card">
-            <p className="eyebrow">Verified identity</p>
-            <h3>Profile snapshot</h3>
-            <dl className="profile-grid">
-              <div>
-                <dt>Phone</dt>
-                <dd>{profile.phoneNumber}</dd>
-              </div>
-              <div>
-                <dt>Gender</dt>
-                <dd>{profile.gender || 'Not specified'}</dd>
-              </div>
-              <div>
-                <dt>Email</dt>
-                <dd>{profile.email || 'Not provided'}</dd>
-              </div>
-              <div>
-                <dt>{entityLabel}</dt>
-                <dd>{profile.organizationName || 'Pending'}</dd>
-              </div>
-            </dl>
-          </article>
+              <div className="delivery-columns">
+                <div className="delivery-column">
+                  <div className="column-head">
+                    <div>
+                      <p className="eyebrow">Pending customers</p>
+                      <h4>{ deliveryState.pending.length } stops left</h4>
+                    </div>
+                  </div>
 
-          <article className="dashboard-card">
-            <p className="eyebrow">Session token</p>
-            <h3>Access granted</h3>
-            <p className="token-preview">{accessToken}</p>
-          </article>
-        </section>
+                  <div className="delivery-list">
+                    { deliveryState.pending.map((item) => (
+                      <article className="delivery-item" key={ item.id }>
+                        <div className="delivery-main">
+                          <button className="action-button action-view inline-view-button" type="button" onClick={ () => openCustomerView(item.familyName) }>
+                            <Eye size={ 16 } />
+                          </button>
+                          <div>
+                            <strong>{ item.familyName }</strong>
+                            <p>{ formatLitres(item.amountLitres) }</p>
+                          </div>
+                        </div>
+                        <div className="delivery-actions">
+                          <button
+                            className="action-button action-delivered"
+                            type="button"
+                            onClick={ () => markDelivery(item, 'Delivered') }
+                          >
+                            Delivered
+                          </button>
+                          <button
+                            className="action-button action-absent"
+                            type="button"
+                            onClick={ () => markDelivery(item, 'Absent') }
+                          >
+                            Absent
+                          </button>
+                          <button
+                            className="action-button action-extra"
+                            type="button"
+                            onClick={ () => openExtraModal(item) }
+                          >
+                            <Plus size={ 16 } />
+                            Extra
+                          </button>
+                        </div>
+                      </article>
+                    )) }
 
-        <section className="trust-strip dashboard-trust" aria-label="Dashboard summary">
-          {dashboardHighlights.map((item) => (
-            <article key={item.label}>
-              <p>{item.label}</p>
-              <strong>{item.value}</strong>
-            </article>
-          ))}
-        </section>
+                    { deliveryState.pending.length === 0 ? (
+                      <div className="empty-delivery-state">
+                        <p>All pending customers are marked for this date.</p>
+                      </div>
+                    ) : null }
+                  </div>
+                </div>
+
+                <div className="delivery-column delivery-history">
+                  <div className="column-head">
+                    <div>
+                      <p className="eyebrow">Completed today</p>
+                      <h4>{ deliveryState.completed.length } records</h4>
+                    </div>
+                  </div>
+
+                  <div className="delivery-history-list">
+                    { deliveryState.completed.map((item) => (
+                      <article className="history-item" key={ `${item.id}-${item.deliveredAt}` }>
+                        <div>
+                          <div className="history-name-row">
+                            <button className="action-button action-view compact-view-button" type="button" onClick={ () => openCustomerView(item.familyName) }>
+                              <Eye size={ 16 } />
+                            </button>
+                            <div>
+                              <strong>{ item.familyName }</strong>
+                              <p>
+                                { item.status }
+                                { item.extraLitres ? ` · ${formatLitres(item.extraLitres)} extra` : '' }
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="history-side">
+                          <span>{ item.deliveredAt }</span>
+                        </div>
+                      </article>
+                    )) }
+
+                    { deliveryState.completed.length === 0 ? (
+                      <div className="empty-delivery-state">
+                        <p>Completed records for the date will accumulate here.</p>
+                      </div>
+                    ) : null }
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section className="dashboard-grid">
+              <article className="dashboard-card">
+                <p className="eyebrow">Verified identity</p>
+                <h3>Profile snapshot</h3>
+                <dl className="profile-grid">
+                  <div>
+                    <dt>Phone</dt>
+                    <dd>{ profile.phoneNumber }</dd>
+                  </div>
+                  <div>
+                    <dt>Gender</dt>
+                    <dd>{ profile.gender || 'Not specified' }</dd>
+                  </div>
+                  <div>
+                    <dt>Email</dt>
+                    <dd>{ profile.email || 'Not provided' }</dd>
+                  </div>
+                  <div>
+                    <dt>{ entityLabel }</dt>
+                    <dd>{ profile.organizationName || 'Pending' }</dd>
+                  </div>
+                </dl>
+              </article>
+
+              <article className="dashboard-card">
+                <p className="eyebrow">Session token</p>
+                <h3>Access granted</h3>
+                <p className="token-preview">{ accessToken }</p>
+              </article>
+            </section>
+
+            <section className="trust-strip dashboard-trust" aria-label="Dashboard summary">
+              { dashboardHighlights.map((item) => (
+                <article key={ item.label }>
+                  <p>{ item.label }</p>
+                  <strong>{ item.value }</strong>
+                </article>
+              )) }
+            </section>
           </>
-        )}
+        ) }
       </main>
 
-      {extraTarget ? (
+      { extraTarget ? (
         <div className="auth-overlay" role="dialog" aria-modal="true" aria-labelledby="extra-title">
           <div className="auth-modal extra-modal">
             <button
               className="auth-close"
               type="button"
-              onClick={() => setExtraTarget(null)}
+              onClick={ () => setExtraTarget(null) }
               aria-label="Close extra milk popup"
             >
-              <X size={18} />
+              <X size={ 18 } />
             </button>
 
             <p className="eyebrow">Extra milk</p>
-            <h2 id="extra-title">Add extra quantity for {extraTarget.familyName}.</h2>
+            <h2 id="extra-title">Add extra quantity for { extraTarget.familyName }.</h2>
             <p className="auth-text">
-              Base subscription is {formatLitres(extraTarget.amountLitres)}. Choose the additional amount
+              Base subscription is { formatLitres(extraTarget.amountLitres) }. Choose the additional amount
               in `0.5 litre` steps.
             </p>
 
@@ -690,31 +690,31 @@ function Dashboard({ profile, accessToken, onLogout, onGoHome }) {
               <button
                 className="date-button"
                 type="button"
-                onClick={() => setExtraAmount((current) => Math.max(0.5, current - 0.5))}
+                onClick={ () => setExtraAmount((current) => Math.max(0.5, current - 0.5)) }
               >
-                <ArrowLeft size={18} />
+                <ArrowLeft size={ 18 } />
               </button>
-              <div className="extra-amount-display">{formatLitres(extraAmount)}</div>
+              <div className="extra-amount-display">{ formatLitres(extraAmount) }</div>
               <button
                 className="date-button"
                 type="button"
-                onClick={() => setExtraAmount((current) => current + 0.5)}
+                onClick={ () => setExtraAmount((current) => current + 0.5) }
               >
-                <ArrowRight size={18} />
+                <ArrowRight size={ 18 } />
               </button>
             </div>
 
             <div className="auth-actions">
-              <button className="button button-primary" type="button" onClick={confirmExtraMilk}>
+              <button className="button button-primary" type="button" onClick={ confirmExtraMilk }>
                 Save extra milk
               </button>
-              <button className="button button-secondary" type="button" onClick={() => setExtraTarget(null)}>
+              <button className="button button-secondary" type="button" onClick={ () => setExtraTarget(null) }>
                 Cancel
               </button>
             </div>
           </div>
         </div>
-      ) : null}
+      ) : null }
     </div>
   )
 }
@@ -730,6 +730,17 @@ function App() {
   const [registration, setRegistration] = useState(() =>
     createRegistrationState(readStoredProfile()?.phoneNumber || ''),
   )
+  const pravah = usePravah({
+    streams: ['user:123', 'global']
+  });
+
+  // 1. Listen for events using a callback
+  usePravahListener(pravah, 'message-received', (data) => {
+    console.log('New message signal:', data.id);
+  });
+
+  // 2. Or track event data in state automatically
+  const latestAlert = usePravahState(pravah, 'system-alert');
 
   const isAuthenticated = Boolean(accessToken && profile)
   const organizationLabel = registration.role === 'milkman' ? 'Dairy name' : 'Family name'
@@ -848,27 +859,27 @@ function App() {
                 The dashboard route only unlocks after the `login-successful` event provides an access
                 token and the browser has a stored registration profile.
               </p>
-              <button className="button button-primary" type="button" onClick={openAuthModal}>
+              <button className="button button-primary" type="button" onClick={ openAuthModal }>
                 Get started
-                <ArrowRight size={18} />
+                <ArrowRight size={ 18 } />
               </button>
             </section>
 
-            {isAuthOpen ? (
+            { isAuthOpen ? (
               <AuthModal
-                adminPhoneNumber={ADMIN_WHATSAPP_NUMBER}
-                authCode={authCode}
-                authStep={authStep}
-                onClose={closeAuthModal}
-                onContinueToWhatsApp={buildWhatsAppUrl(ADMIN_WHATSAPP_NUMBER, authCode)}
-                onSimulateLogin={handleSimulatedLoginEvent}
-                onRegistrationChange={handleRegistrationChange}
-                onRegistrationSubmit={handleRegistrationSubmit}
-                organizationLabel={organizationLabel}
-                pendingPhoneNumber={pendingAuth?.phoneNumber || registration.phoneNumber}
-                registration={registration}
+                adminPhoneNumber={ ADMIN_WHATSAPP_NUMBER }
+                authCode={ authCode }
+                authStep={ authStep }
+                onClose={ closeAuthModal }
+                onContinueToWhatsApp={ buildWhatsAppUrl(ADMIN_WHATSAPP_NUMBER, authCode) }
+                onSimulateLogin={ handleSimulatedLoginEvent }
+                onRegistrationChange={ handleRegistrationChange }
+                onRegistrationSubmit={ handleRegistrationSubmit }
+                organizationLabel={ organizationLabel }
+                pendingPhoneNumber={ pendingAuth?.phoneNumber || registration.phoneNumber }
+                registration={ registration }
               />
-            ) : null}
+            ) : null }
           </main>
         </div>
       )
@@ -876,10 +887,10 @@ function App() {
 
     return (
       <Dashboard
-        accessToken={accessToken}
-        onGoHome={() => navigateTo('/')}
-        onLogout={handleLogout}
-        profile={profile}
+        accessToken={ accessToken }
+        onGoHome={ () => navigateTo('/') }
+        onLogout={ handleLogout }
+        profile={ profile }
       />
     )
   }
@@ -889,7 +900,7 @@ function App() {
       <header className="topbar">
         <div className="brand">
           <div className="brand-mark">
-            <Milk size={20} strokeWidth={2.2} />
+            <Milk size={ 20 } strokeWidth={ 2.2 } />
           </div>
           <div>
             <p className="eyebrow">BizBandhan</p>
@@ -903,15 +914,15 @@ function App() {
           <a href="#audience">Who it serves</a>
         </nav>
 
-        {isAuthenticated ? (
-          <button className="nav-cta" type="button" onClick={() => navigateTo('/dashboard')}>
+        { isAuthenticated ? (
+          <button className="nav-cta" type="button" onClick={ () => navigateTo('/dashboard') }>
             Open dashboard
           </button>
         ) : (
-          <button className="nav-cta" type="button" onClick={openAuthModal}>
+          <button className="nav-cta" type="button" onClick={ openAuthModal }>
             Sign in
           </button>
-        )}
+        ) }
       </header>
 
       <main>
@@ -925,13 +936,13 @@ function App() {
             </p>
 
             <div className="hero-actions">
-              <button className="button button-primary" type="button" onClick={openAuthModal}>
+              <button className="button button-primary" type="button" onClick={ openAuthModal }>
                 Get started
-                <ArrowRight size={18} />
+                <ArrowRight size={ 18 } />
               </button>
-              <a className="button button-secondary" href={buildWhatsAppUrl(ADMIN_WHATSAPP_NUMBER, authCode)} target="_blank" rel="noreferrer">
+              <a className="button button-secondary" href={ buildWhatsAppUrl(ADMIN_WHATSAPP_NUMBER, authCode) } target="_blank" rel="noreferrer">
                 Start with a pilot
-                <ArrowRight size={18} />
+                <ArrowRight size={ 18 } />
               </a>
               <a className="button button-secondary" href="#features">
                 Explore the product
@@ -940,15 +951,15 @@ function App() {
 
             <ul className="hero-notes" aria-label="Product highlights">
               <li>
-                <CheckCircle2 size={16} />
+                <CheckCircle2 size={ 16 } />
                 WhatsApp and OTP-led onboarding
               </li>
               <li>
-                <CheckCircle2 size={16} />
+                <CheckCircle2 size={ 16 } />
                 Offline delivery marking with sync recovery
               </li>
               <li>
-                <CheckCircle2 size={16} />
+                <CheckCircle2 size={ 16 } />
                 Household pause and leave controls
               </li>
             </ul>
@@ -987,7 +998,7 @@ function App() {
 
             <div className="panel-grid">
               <div className="panel-card mini-stat">
-                <Clock3 size={18} />
+                <Clock3 size={ 18 } />
                 <div>
                   <strong>Fast morning ops</strong>
                   <p>Bulk delivery actions for dense neighborhood routes.</p>
@@ -995,7 +1006,7 @@ function App() {
               </div>
 
               <div className="panel-card mini-stat">
-                <ShieldCheck size={18} />
+                <ShieldCheck size={ 18 } />
                 <div>
                   <strong>Transparent records</strong>
                   <p>Shared visibility for the vendor and the household.</p>
@@ -1006,12 +1017,12 @@ function App() {
         </section>
 
         <section className="trust-strip" aria-label="Business summary">
-          {trustPoints.map((point) => (
-            <article key={point.label}>
-              <p>{point.label}</p>
-              <strong>{point.value}</strong>
+          { trustPoints.map((point) => (
+            <article key={ point.label }>
+              <p>{ point.label }</p>
+              <strong>{ point.value }</strong>
             </article>
-          ))}
+          )) }
         </section>
 
         <section className="feature-section" id="features">
@@ -1021,18 +1032,18 @@ function App() {
           </div>
 
           <div className="feature-grid">
-            {featureCards.map((feature) => {
+            { featureCards.map((feature) => {
               const Icon = feature.icon
               return (
-                <article className="feature-card" key={feature.title}>
+                <article className="feature-card" key={ feature.title }>
                   <div className="feature-icon">
-                    <Icon size={20} />
+                    <Icon size={ 20 } />
                   </div>
-                  <h3>{feature.title}</h3>
-                  <p>{feature.description}</p>
+                  <h3>{ feature.title }</h3>
+                  <p>{ feature.description }</p>
                 </article>
               )
-            })}
+            }) }
           </div>
         </section>
 
@@ -1044,17 +1055,17 @@ function App() {
 
           <div className="workflow-layout">
             <div className="workflow-list">
-              {journey.map((step, index) => (
-                <article key={step}>
-                  <span>{String(index + 1).padStart(2, '0')}</span>
-                  <p>{step}</p>
+              { journey.map((step, index) => (
+                <article key={ step }>
+                  <span>{ String(index + 1).padStart(2, '0') }</span>
+                  <p>{ step }</p>
                 </article>
-              ))}
+              )) }
             </div>
 
             <div className="workflow-panel">
               <div className="workflow-badge">
-                <Users size={18} />
+                <Users size={ 18 } />
                 <span>Milkman + Household</span>
               </div>
               <h3>One product, two synchronized surfaces.</h3>
@@ -1091,28 +1102,28 @@ function App() {
             <p className="eyebrow">WhatsApp-first access</p>
             <h2>Share the login key on WhatsApp, then let the connector unlock the session.</h2>
           </div>
-          <button className="button button-primary" type="button" onClick={openAuthModal}>
+          <button className="button button-primary" type="button" onClick={ openAuthModal }>
             Start auth flow
-            <ArrowRight size={18} />
+            <ArrowRight size={ 18 } />
           </button>
         </section>
       </main>
 
-      {isAuthOpen ? (
+      { isAuthOpen ? (
         <AuthModal
-          adminPhoneNumber={ADMIN_WHATSAPP_NUMBER}
-          authCode={authCode}
-          authStep={authStep}
-          onClose={closeAuthModal}
-          onContinueToWhatsApp={buildWhatsAppUrl(ADMIN_WHATSAPP_NUMBER, authCode)}
-          onSimulateLogin={handleSimulatedLoginEvent}
-          onRegistrationChange={handleRegistrationChange}
-          onRegistrationSubmit={handleRegistrationSubmit}
-          organizationLabel={organizationLabel}
-          pendingPhoneNumber={pendingAuth?.phoneNumber || registration.phoneNumber}
-          registration={registration}
+          adminPhoneNumber={ ADMIN_WHATSAPP_NUMBER }
+          authCode={ authCode }
+          authStep={ authStep }
+          onClose={ closeAuthModal }
+          onContinueToWhatsApp={ buildWhatsAppUrl(ADMIN_WHATSAPP_NUMBER, authCode) }
+          onSimulateLogin={ handleSimulatedLoginEvent }
+          onRegistrationChange={ handleRegistrationChange }
+          onRegistrationSubmit={ handleRegistrationSubmit }
+          organizationLabel={ organizationLabel }
+          pendingPhoneNumber={ pendingAuth?.phoneNumber || registration.phoneNumber }
+          registration={ registration }
         />
-      ) : null}
+      ) : null }
     </div>
   )
 }
@@ -1133,11 +1144,11 @@ function AuthModal({
   return (
     <div className="auth-overlay" role="dialog" aria-modal="true" aria-labelledby="auth-title">
       <div className="auth-modal">
-        <button className="auth-close" type="button" onClick={onClose} aria-label="Close authentication">
-          <X size={18} />
+        <button className="auth-close" type="button" onClick={ onClose } aria-label="Close authentication">
+          <X size={ 18 } />
         </button>
 
-        {authStep === 'code' ? (
+        { authStep === 'code' ? (
           <>
             <p className="eyebrow">Step 1</p>
             <h2 id="auth-title">Send your login key on WhatsApp.</h2>
@@ -1149,26 +1160,26 @@ function AuthModal({
             <div className="auth-code-card">
               <div>
                 <p className="auth-label">Your key</p>
-                <strong>{authCode}</strong>
+                <strong>{ authCode }</strong>
               </div>
               <div>
                 <p className="auth-label">Admin WhatsApp</p>
-                <span>{adminPhoneNumber}</span>
+                <span>{ adminPhoneNumber }</span>
               </div>
             </div>
 
             <div className="auth-actions">
               <a
                 className="button button-primary"
-                href={onContinueToWhatsApp}
+                href={ onContinueToWhatsApp }
                 rel="noreferrer"
                 target="_blank"
               >
-                <MessageCircleMore size={18} />
+                <MessageCircleMore size={ 18 } />
                 Continue on WhatsApp
               </a>
-              <button className="button button-secondary" type="button" onClick={onSimulateLogin}>
-                <KeyRound size={18} />
+              <button className="button button-secondary" type="button" onClick={ onSimulateLogin }>
+                <KeyRound size={ 18 } />
                 Simulate connector callback
               </button>
             </div>
@@ -1190,20 +1201,20 @@ function AuthModal({
               The phone number below came from the simulated WhatsApp auth event. This field stays locked.
             </p>
 
-            <form className="registration-form" onSubmit={onRegistrationSubmit}>
+            <form className="registration-form" onSubmit={ onRegistrationSubmit }>
               <label>
                 <span>Name</span>
-                <input name="name" onChange={onRegistrationChange} required value={registration.name} />
+                <input name="name" onChange={ onRegistrationChange } required value={ registration.name } />
               </label>
 
               <label>
                 <span>Verified contact number</span>
-                <input name="phoneNumber" readOnly value={pendingPhoneNumber} />
+                <input name="phoneNumber" readOnly value={ pendingPhoneNumber } />
               </label>
 
               <label>
                 <span>Gender</span>
-                <select name="gender" onChange={onRegistrationChange} required value={registration.gender}>
+                <select name="gender" onChange={ onRegistrationChange } required value={ registration.gender }>
                   <option value="">Select gender</option>
                   <option value="male">Male</option>
                   <option value="female">Female</option>
@@ -1214,51 +1225,51 @@ function AuthModal({
 
               <label>
                 <span>Email</span>
-                <input name="email" onChange={onRegistrationChange} type="email" value={registration.email} />
+                <input name="email" onChange={ onRegistrationChange } type="email" value={ registration.email } />
               </label>
 
               <label className="full-span">
                 <span>Address</span>
-                <textarea name="address" onChange={onRegistrationChange} required rows="3" value={registration.address} />
+                <textarea name="address" onChange={ onRegistrationChange } required rows="3" value={ registration.address } />
               </label>
 
               <label>
                 <span>Landmark</span>
-                <input name="landmark" onChange={onRegistrationChange} value={registration.landmark} />
+                <input name="landmark" onChange={ onRegistrationChange } value={ registration.landmark } />
               </label>
 
               <label>
                 <span>Referral code</span>
-                <input name="referralCode" onChange={onRegistrationChange} value={registration.referralCode} />
+                <input name="referralCode" onChange={ onRegistrationChange } value={ registration.referralCode } />
               </label>
 
               <label>
                 <span>Role</span>
-                <select name="role" onChange={onRegistrationChange} required value={registration.role}>
+                <select name="role" onChange={ onRegistrationChange } required value={ registration.role }>
                   <option value="milkman">Milk vendor</option>
                   <option value="customer">Customer</option>
                 </select>
               </label>
 
               <label>
-                <span>{organizationLabel}</span>
+                <span>{ organizationLabel }</span>
                 <input
                   name="organizationName"
-                  onChange={onRegistrationChange}
+                  onChange={ onRegistrationChange }
                   required
-                  value={registration.organizationName}
+                  value={ registration.organizationName }
                 />
               </label>
 
               <div className="auth-actions full-span">
                 <button className="button button-primary" type="submit">
-                  <UserRound size={18} />
+                  <UserRound size={ 18 } />
                   Complete registration
                 </button>
               </div>
             </form>
           </>
-        )}
+        ) }
       </div>
     </div>
   )
