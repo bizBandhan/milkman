@@ -2,11 +2,11 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "core/index.js",
   "scripts": {
-    "dev": "nodemon core/server.js",
-    "start": "node core/server.js",
-    "prod": "node core/server.js"
+    "dev": "nodemon core/index.js",
+    "start": "node core/index.js",
+    "prod": "node core/index.js"
   },
   "keywords": [],
   "author": "Om Prakash Tiwari <optiwari.india@gmail.com>",

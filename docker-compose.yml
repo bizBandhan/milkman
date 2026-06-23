@@ -10,6 +10,7 @@ services:
       - bizbandhan-milkman
   backend: 
     image: bizbandhan-milkman
+    restart: unless-stopped
     build:
       context: codebase/backend
       target: development
@@ -24,6 +25,7 @@ services:
       - ./codebase/backend/public:/app/public
   frontend:
     image: vite-app
+    restart: unless-stopped
     build:
       context: ./codebase/frontend
       dockerfile: Dockerfile
