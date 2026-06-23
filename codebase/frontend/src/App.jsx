@@ -740,7 +740,7 @@ function App() {
   });
 
   // 2. Or track event data in state automatically
-  const latestAlert = usePravahState(pravah, 'system-alert');
+  // const latestAlert = usePravahState(pravah, 'system-alert');
 
   const isAuthenticated = Boolean(accessToken && profile)
   const organizationLabel = registration.role === 'milkman' ? 'Dairy name' : 'Family name'
