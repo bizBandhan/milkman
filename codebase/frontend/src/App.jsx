@@ -27,7 +27,7 @@ import { Navbar, AuthModal } from "./components"
 import { api } from './utils'
 const AUTH_PROFILE_KEY = 'milkman-auth-profile'
 const AUTH_TOKEN_KEY = 'milkman-auth-token'
-const ADMIN_WHATSAPP_NUMBER = import.meta.env.VITE_ADMIN_WHATSAPP_NUMBER || '919999999999'
+const ADMIN_WHATSAPP_NUMBER = import.meta.env.VITE_ADMIN_WHATSAPP_NUMBER || '919311150364'
 
 const dashboardHighlights = [
   { label: 'Connected channel', value: 'WhatsApp key verification' },
@@ -735,13 +735,11 @@ function App() {
   const organizationLabel = registration.role === 'milkman' ? 'Dairy name' : 'Family name'
 
   const pravah = usePravah({
-    streams: ["auth"]
+    streams: ["bizbandhan-milkman"]
   })
-  useEffect(()=>{
-    api.get(`/pravah/health`).then(d=>{
-      console.log(d)
-    })
-  },[pravah])
+  const connection = usePravahState(pravah, "connected");
+  const login = usePravahState(pravah, `login-${connection?.pravahId}`);
+  console.log(login)
   function navigateTo(pathname) {
     window.history.pushState({}, '', pathname)
     setCurrentPath(pathname)
@@ -1083,10 +1081,10 @@ function App() {
       { isAuthOpen ? (
         <AuthModal
           adminPhoneNumber={ ADMIN_WHATSAPP_NUMBER }
-          authCode={ authCode }
+          authCode={ connection?.pravahId }
           authStep={ authStep }
           onClose={ closeAuthModal }
-          onContinueToWhatsApp={ buildWhatsAppUrl(ADMIN_WHATSAPP_NUMBER, authCode) }
+          onContinueToWhatsApp={ buildWhatsAppUrl(ADMIN_WHATSAPP_NUMBER, connection?.pravahId) }
           onSimulateLogin={ handleSimulatedLoginEvent }
           onRegistrationChange={ handleRegistrationChange }
           onRegistrationSubmit={ handleRegistrationSubmit }

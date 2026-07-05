@@ -18,7 +18,9 @@ import moduleRouter from "../modules/index.js";
             "DB",
             "SESSION_SECRET",
             "JWT_SECRET",
-            "PWD"
+            "PWD",
+            "PRAVAH_URL",
+            "PRAVAH_API_KEY"
         ])
         const publicDir = `${process.env.PWD}/public`;
         createDirIfNotExist(publicDir)

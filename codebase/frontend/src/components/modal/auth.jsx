@@ -52,7 +52,7 @@ export default function AuthModal({
 
                         <div className="auth-code-card">
                             <div>
-                                <p className="auth-label">Your key</p>
+                                <p className="auth-label">Your login key</p>
                                 <strong>{ authCode }</strong>
                             </div>
                             <div>
