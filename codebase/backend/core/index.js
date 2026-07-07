@@ -5,7 +5,7 @@ import pureIP from "express-pureip";
 import cookieParser from "cookie-parser";
 import fileUpload from "express-fileupload";
 import { ExpressServer, configTest, fallbackRoute, errorRoute } from "express-web-tools";
-
+import { publishEvent } from "./utils/index.js"
 import {
     createDirIfNotExist,
     setOrigin
@@ -28,15 +28,15 @@ import moduleRouter from "../modules/index.js";
         const app = new ExpressServer();
         app.addMiddleware([
             express.static(publicDir),
-            cookieParser(),
+            setOrigin,
             cors({}),
+            cookieParser(),
             express.json(),
             express.urlencoded({
                 extended: true
             }),
             fileUpload(),
             pureIP,
-            setOrigin
         ])
         app.addRoute("/api/v1", moduleRouter) //Add routes
         app.addMiddleware([

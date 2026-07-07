@@ -1,13 +1,13 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { PravahProvider } from 'pravah-sdk';
+
 import './index.css'
 import App from './App.jsx'
-
+import { Providers } from "./context"
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <PravahProvider>
+    <Providers>
       <App />
-    </PravahProvider>
+    </Providers>
   </StrictMode>,
 )
