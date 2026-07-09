@@ -1,39 +1,20 @@
 import {
-    ArrowRight,
-    ArrowLeft,
-    BadgeCheck,
-    CalendarRange,
-    CheckCircle2,
-    Clock3,
-    CreditCard,
-    Eye,
-    KeyRound,
-    LogOut,
     MessageCircleMore,
-    Milk,
-    NotebookTabs,
-    Plus,
-    ShieldCheck,
-    Smartphone,
-    Users,
     UserRound,
-    WifiOff,
     X,
 } from 'lucide-react'
-
 export default function AuthModal({
-    adminPhoneNumber,
-    authCode,
+    whatsappNumber,
     authStep,
     onClose,
-    onContinueToWhatsApp,
-    onSimulateLogin,
+    pravahState,
     onRegistrationChange,
     onRegistrationSubmit,
     organizationLabel,
     pendingPhoneNumber,
     registration,
 }) {
+    
     return (
         <div className="auth-overlay" role="dialog" aria-modal="true" aria-labelledby="auth-title">
             <div className="auth-modal">
@@ -53,37 +34,28 @@ export default function AuthModal({
                         <div className="auth-code-card">
                             <div>
                                 <p className="auth-label">Your login key</p>
-                                <strong>{ authCode }</strong>
+                                <strong>{ pravahState?.pravahId }</strong>
                             </div>
                             <div>
                                 <p className="auth-label">Admin WhatsApp</p>
-                                <span>{ adminPhoneNumber }</span>
+                                <span>{ whatsappNumber }</span>
                             </div>
                         </div>
 
                         <div className="auth-actions">
                             <a
                                 className="button button-primary"
-                                href={ onContinueToWhatsApp }
+                                href={ `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(pravahState?.pravahId)}` }
                                 rel="noreferrer"
                                 target="_blank"
                             >
                                 <MessageCircleMore size={ 18 } />
                                 Continue on WhatsApp
                             </a>
-                            <button className="button button-secondary" type="button" onClick={ onSimulateLogin }>
+                            {/* <button className="button button-secondary" type="button" onClick={ onSimulateLogin }>
                                 <KeyRound size={ 18 } />
                                 Simulate connector callback
-                            </button>
-                        </div>
-
-                        <div className="auth-note">
-                            <p className="auth-label">Frontend preview note</p>
-                            <p>
-                                The second button dispatches `login-successful` on `document`. If this browser already has
-                                a saved auth profile, you will be taken to `/dashboard`; otherwise the registration form
-                                opens.
-                            </p>
+                            </button> */}
                         </div>
                     </>
                 ) : (

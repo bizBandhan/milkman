@@ -12,7 +12,10 @@ router
                 return res.json({
                     status: "success",
                     message: "",
-                    data
+                    data:data.reduce((a,c)=>{
+                        a[c.name]=c.value;
+                        return a;
+                    },{})
                 })
             }
         )

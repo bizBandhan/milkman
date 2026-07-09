@@ -26,9 +26,9 @@ const schema = new MongooseModel(
     ],
     {},
     {
-        multitenant: true,
-        auditEnforce: true,
-        softDelete: true,
+        multitenant: false,
+        auditEnforce: false,
+        softDelete: false,
         timestamps: true
     }
 );

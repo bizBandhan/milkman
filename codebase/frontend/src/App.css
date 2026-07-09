@@ -553,6 +553,8 @@
   flex-wrap: wrap;
   gap: 0.85rem;
   margin-top: 1.25rem;
+  align-items: center;
+  justify-content: center;
 }
 
 .registration-form {

@@ -1,7 +1,7 @@
 import { MemberProvider, useMember } from "./User";
 import { ConfigProvider, useConfig } from "./Config";
 import { PravahProvider } from "pravah-sdk"
-export { useMember, useConfig };
+
 
 export function Providers({ children }) {
     const options = {
@@ -19,3 +19,6 @@ export function Providers({ children }) {
         </ConfigProvider>
     );
 }
+
+
+export { useMember, useConfig };
