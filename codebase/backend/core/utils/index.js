@@ -6,17 +6,9 @@ export function createDirIfNotExist(dirPath) {
     fs.mkdirSync(dirPath, { recursive: true });
 }
 export function setOrigin(req, res, next) {
-    const origin = req.headers.origin || req.headers.referer;
-    if (origin) {
-        try {
-            const url = new URL(origin);
-            req.origin = url.hostname;
-        } catch (e) {
-            req.origin = req.headers.host;
-        }
-    } else {
-        req.origin = req.headers.host;
-    }
+    const {origin} = process.env;
+    console.log({origin})
+    req.origin=origin;
     next();
 }
 const url = process.env.PRAVAH_URL;

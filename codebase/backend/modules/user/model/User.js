@@ -23,16 +23,16 @@ const schema = new MongooseModel(
         },
         webpush: [
             {
-                pravahID:{type:String,trim:true,lowercase:true},
+                pravahID: { type: String, trim: true, lowercase: true },
                 endpoint: { type: String },
                 expiration: { type: mongoose.Schema.Types.Mixed },
                 keys: { type: mongoose.Schema.Types.Mixed }
             }
         ],
-        activeDevices:[
+        activeDevices: [
             {
-                pravahID:{
-                    type:String
+                pravahID: {
+                    type: String
                 }
             }
         ]
@@ -40,20 +40,23 @@ const schema = new MongooseModel(
     [
         [
             {
-                phone:1,
-                origin:1
+                phone: 1,
+                origin: 1
             },
             {
-                unique:true
+                unique: true
             }
         ],
         [
             {
-                email:1,
-                origin:1
+                email: 1,
+                origin: 1
             },
             {
-                unique:true
+                unique: true,
+                partialFilterExpression: {
+                    email: { $exists: true, $ne: null }
+                }
             }
         ]
     ],

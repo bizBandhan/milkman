@@ -11,6 +11,7 @@ import {
     setOrigin
 } from "./utils/index.js";
 import moduleRouter from "../modules/index.js";
+import webhookRouter from "../modules/webhook/index.js";
 (async () => {
     try {
         configTest([
@@ -37,6 +38,7 @@ import moduleRouter from "../modules/index.js";
             }),
             fileUpload(),
             pureIP,
+            webhookRouter
         ])
         app.addRoute("/api/v1", moduleRouter) //Add routes
         app.addMiddleware([

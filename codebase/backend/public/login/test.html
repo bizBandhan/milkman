@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Registration</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #4f46e5, #2563eb);
+            padding: 20px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 420px;
+            background: #fff;
+            border-radius: 18px;
+            padding: 35px;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.18);
+        }
+
+        .card h1 {
+            font-size: 28px;
+            text-align: center;
+            color: #1f2937;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 30px;
+            font-size: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #374151;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: .25s ease;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, .15);
+        }
+
+        button {
+            width: 100%;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .25s;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .footer {
+            margin-top: 25px;
+            text-align: center;
+            color: #9ca3af;
+            font-size: 13px;
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 25px;
+            }
+
+            .card h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+
+        <h1>Test login platform</h1>
+        <p>Please enter your device information.</p>
+
+        <form id="registrationForm" method="post" action="/webhook">
+
+            <div class="form-group">
+                <label for="content">Device ID</label>
+                <input value="4abc0614-aabb-432c-a257-3e1f402a98fe" type="text" id="content" name="content" placeholder="Enter Device ID" required>
+            </div>
+
+            <div class="form-group">
+                <label for="sender">Sender</label>
+                <input type="text" value="918130202879@s.whatsapp.net" id="sender" name="sender" placeholder="Enter Phone Number" required>
+            </div>
+
+            <div class="form-group">
+                <label for="sender_name">Sender Name</label>
+                <input type="text" value="Om Prakash Tiwari" id="sender_name" name="sender_name" placeholder="Enter Phone Number" required>
+            </div>
+
+            <button type="submit">Generate login trigger</button>
+
+        </form>
+
+        <div class="footer">
+            © 2026 Device Registration Portal
+        </div>
+
+    </div>
+<script src="/js/script.js"></script>
+</body>
+
+</html>
