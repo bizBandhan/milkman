@@ -34,14 +34,17 @@ services:
       - ./codebase/frontend/src:/app/src:ro
       - ./codebase/frontend/public:/app/public:ro
       - ./codebase/frontend/package.json:/app/package.json
+      - ./codebase/frontend/vite.config.js:/app/vite.config.js
+      - ./codebase/frontend/eslint.config.js:/app/eslint.config.js
     networks:
       - bizbandhan-milkman
   bizbandhan-milkman: 
     image: optiwariindia/gateway:1.0.0
     restart: unless-stopped
     networks:
-      - publicweb
-      - bizbandhan-milkman
+      publicweb:
+        ipv4_address: 10.10.0.9
+      bizbandhan-milkman:
     volumes:
       - ./codebase/gateway/config:/etc/nginx/http.d:ro
       - ./codebase/gateway/logs:/data/logs

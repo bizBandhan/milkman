@@ -10,18 +10,35 @@ export function MemberProvider({ children }) {
         loadData(
             api.get(`/api/v1/me`),
             resp => {
-                setMe(resp.data)
+                let data = resp?.data;
+                if (data instanceof Array) {
+                    data = null
+                }
+                setMe(data)
             },
             () => { setIsLoading(false) }
         )
     }, [reload])
+    console.log({ me })
     return <MemberContext.Provider value={
         {
             value: me,
             loading: isLoading,
-            reload: () => {
+            reload: async () => {
                 setIsLoading(true);
-                setReload(old => (old + 1) % 10)
+                try {
+                    let resp = await api.delete(`/api/v1/me`);
+                    let data = resp?.data;
+                    if (data instanceof Array) {
+                        data = null
+                    }
+                    setMe(data)
+
+                } catch (error) {
+                    console.log(error)
+                } finally {
+                    setIsLoading(false)
+                }
             },
             logout: async () => {
                 setIsLoading(true);

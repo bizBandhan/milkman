@@ -16,7 +16,8 @@ export default defineConfig({
     strictPort: true,
     allowedHosts: [
       '.bizbandhan.com',
-      '.optiwari.duckdns.org'
+      '.optiwari.duckdns.org',
+      'milkman.bizbandhan'
     ]
   }
 });

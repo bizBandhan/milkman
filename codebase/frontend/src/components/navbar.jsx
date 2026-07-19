@@ -1,29 +1,10 @@
 import {
-    ArrowRight,
-    ArrowLeft,
-    BadgeCheck,
-    CalendarRange,
-    CheckCircle2,
-    Clock3,
-    CreditCard,
-    Eye,
-    KeyRound,
-    LogOut,
-    MessageCircleMore,
     Milk,
-    NotebookTabs,
-    Plus,
-    ShieldCheck,
-    Smartphone,
-    Users,
-    UserRound,
-    WifiOff,
-    X,
 } from 'lucide-react'
-
-export default function Navbar({ isAuthenticated, onOpenModal }) {
-    function openAuthModal() {
-        if (onOpenModal) onOpenModal("auth")
+import { navigateTo } from "../utils"
+export default function Navbar({ isAuthenticated, onSignIn }) {
+    function signIn() {
+        if (onSignIn) onSignIn("auth")
     }
     return <header className="topbar">
         <div className="brand">
@@ -47,7 +28,7 @@ export default function Navbar({ isAuthenticated, onOpenModal }) {
                 Open dashboard
             </button>
         ) : (
-            <button className="nav-cta" type="button" onClick={ openAuthModal }>
+            <button className="nav-cta" type="button" onClick={ signIn }>
                 Sign in
             </button>
         ) }
