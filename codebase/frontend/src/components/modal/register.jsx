@@ -75,10 +75,10 @@ export default function RegisterModal({
                             <option value="customer">Customer</option>
                         </select>
                     </label>
-                    <label className="full-span">
+                    {/* <label className="full-span">
                         <span>Address</span>
                         <textarea { ...form.register("address") } />
-                    </label>
+                    </label> */}
 
 
 

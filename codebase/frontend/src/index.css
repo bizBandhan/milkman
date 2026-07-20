@@ -20,21 +20,17 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
 * {
   box-sizing: border-box;
 }
-
 html {
   scroll-behavior: smooth;
 }
-
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
 }
-
 body,
 a,
 button,
@@ -43,6 +39,14 @@ textarea,
 select {
   font: inherit;
 }
+a {
+  color: inherit;
+}
+/*
+
+
+
+
 
 body::before {
   content: '';
@@ -62,6 +66,4 @@ body::before {
   min-height: 100vh;
 }
 
-a {
-  color: inherit;
-}
+//*/

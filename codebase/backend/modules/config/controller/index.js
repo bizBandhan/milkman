@@ -13,7 +13,6 @@ class Config extends CrudController {
             name:"whatsapp-no",
             value:"918130202879"
         })
-        console.log(temp)
     }
 }
 

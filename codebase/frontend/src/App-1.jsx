@@ -893,7 +893,7 @@ function App() {
   return (
     <div className="page-shell">
       <Navbar isAuthenticated={ isAuthenticated } onOpenModal={ openAuthModal } />
-{/**
+
       <main>
         <section className="hero">
           <div className="hero-copy">
@@ -1077,7 +1077,7 @@ function App() {
           </button>
         </section>
       </main> 
- */}
+ 
 
       { isAuthOpen ? (
         <AuthModal

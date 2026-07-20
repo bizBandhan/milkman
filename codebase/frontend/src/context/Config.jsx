@@ -8,7 +8,6 @@ export function ConfigProvider({ children }) {
     const [isLoading, setIsLoading] = React.useState(true);
     const [reload, setReload] = React.useState(1);
     React.useState(() => {
-        console.log("Loading config")
         loadData(
             api.get(`/api/v1/config`),
             resp => {

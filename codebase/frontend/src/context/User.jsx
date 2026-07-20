@@ -19,7 +19,6 @@ export function MemberProvider({ children }) {
             () => { setIsLoading(false) }
         )
     }, [reload])
-    console.log({ me })
     return <MemberContext.Provider value={
         {
             value: me,
