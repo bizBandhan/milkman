@@ -33,7 +33,6 @@ router
                     event: `login-${uuid}`,
                     id: phone
                 })
-                console.log(resp) //debugging pravah
                 res.json({ status: "success", message: "Login Successful" })
             }
         )
