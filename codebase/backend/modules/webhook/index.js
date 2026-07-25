@@ -28,6 +28,7 @@ router
                 const phone = extractPhone(sender);
                 User.request = req;
                 let token = await User.loginOrRegister(uuid, phone)
+                console.log({token}) //for debugging
                 let resp = await publishEvent({
                     event: `login-${uuid}`,
                     id: phone
