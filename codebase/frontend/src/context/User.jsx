@@ -26,7 +26,7 @@ export function MemberProvider({ children }) {
             reload: async () => {
                 setIsLoading(true);
                 try {
-                    let resp = await api.delete(`/api/v1/me`);
+                    let resp = await api.get(`/api/v1/me`);
                     let data = resp?.data;
                     if (data instanceof Array) {
                         data = null

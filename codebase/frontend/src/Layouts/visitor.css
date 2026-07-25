@@ -1,0 +1,77 @@
+.home {
+    background: url("/images/bg-01.png");
+    background-size:cover;
+    background-repeat:no-repeat;
+    height:100vh;
+    width:100vw;
+}
+.page-body{
+    display: grid;
+    grid-template-columns: 140px 1fr;
+}
+.hero{
+    /* background-color:rgba(255,255,255,0.4); */
+    margin:1rem;
+    border-radius:0.5rem;
+    padding:1rem;
+    text-align: justify;
+}
+.hero p{
+    margin:0 4rem 1rem 0;
+}
+ul.features{
+    list-style: none;
+    padding:0;
+    width:130px;
+    gap:2px;
+}
+ul.features li{
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+    text-align:center;
+    color:#fff;
+    font-size: 0.8rem;
+    padding: 0 1rem;
+    border-bottom: 1px solid #db7b5b;
+}
+ul.features li .icon{
+    background-color: #fff;
+    width:50px;
+    height:50px;
+    border-radius:50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+ul.features li .icon svg{
+    color:#ed3f03;
+    font-size: 2rem;
+}
+
+ul.usp{
+    list-style: none;
+    background-color: #fff;
+    display: flex;
+    margin:1rem;
+    border-radius: 1rem;
+    padding:0.5rem 0;
+    gap:1rem;
+    justify-content: space-evenly;
+    position: fixed;
+    bottom:1rem;
+    left:0;
+    right:0;
+    box-shadow: 0 0 2rem #db7b5b;
+}
+ul.usp li{
+    display: flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+ul.usp li .icon svg{
+    color:#ed3f03;
+    font-size: 3rem;
+}

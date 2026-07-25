@@ -1,4 +1,5 @@
-import { navigateTo } from "../utils"
+import { navigateTo } from "../utils";
+
 export default function Navbar({ isAuthenticated, onSignIn }) {
     function signIn() {
         if (onSignIn) onSignIn("auth")
