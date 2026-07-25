@@ -7,7 +7,10 @@ export function createDirIfNotExist(dirPath) {
 }
 export function setOrigin(req, res, next) {
     const {origin} = process.env;
-    console.log({origin})
+    console.log({
+        url:req.url,
+        method:req.method
+    })
     req.origin=origin;
     next();
 }
