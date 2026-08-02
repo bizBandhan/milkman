@@ -23,7 +23,6 @@ ul.features{
     list-style: none;
     padding:0;
     width:130px;
-    gap:2px;
 }
 ul.features li{
     display: flex;
@@ -31,8 +30,8 @@ ul.features li{
     align-items: center;
     text-align:center;
     color:#fff;
-    font-size: 0.8rem;
-    padding: 0 1rem;
+    font-size: 0.6rem;
+    padding: 0.2rem;
     border-bottom: 1px solid #db7b5b;
 }
 ul.features li .icon{
@@ -70,6 +69,7 @@ ul.usp li{
     justify-content: center;
     align-items: center;
     text-align: center;
+    font-size: 0.8rem;
 }
 ul.usp li .icon svg{
     color:#ed3f03;
