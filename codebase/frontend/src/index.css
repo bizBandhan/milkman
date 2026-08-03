@@ -20,17 +20,21 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
 * {
   box-sizing: border-box;
 }
+
 html {
   scroll-behavior: smooth;
 }
+
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
 }
+
 body,
 a,
 button,
@@ -39,9 +43,53 @@ textarea,
 select {
   font: inherit;
 }
+
 a {
   color: inherit;
 }
+
+.nav-cta .user-name {
+  max-width: 3rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.user-menu-dropdown {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background-color: var(--surface-strong);
+  border: 1px solid var(--accent-color);
+  border-radius: 0.25rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  padding: 0.2rem;
+  list-style: none;
+  flex-direction: column;  
+}
+.user-menu-dropdown li button{
+  background: none;
+  border: none;
+  color: var(--text-color);
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  text-align: left;
+  width: 100%;
+  font: inherit;
+  &:hover {
+    background-color: var(--accent-color);
+    color: var(--surface-strong);
+  }
+}
+@media (min-width: 768px) {
+  .nav-cta .user-name {
+    max-width: 15rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+}
+
 /*
 
 

@@ -1,12 +1,14 @@
+import React from "react";
 import { navigateTo } from "../utils";
 
-export default function Navbar({ isAuthenticated, onSignIn }) {
+export default function Navbar({ onSignIn, user, pravah }) {
+    const isAuthenticated = user?.loggedIn && [undefined, "", null].includes(user?.value?.role) === false;
     function signIn() {
         if (onSignIn) onSignIn("auth")
     }
     return <header className="topbar">
         <div className="brand">
-            <img src={ "/logo.png" } alt={ "BizBandhan Milkman" } height={ 50 } />
+            <img src={"/logo.png"} alt={"BizBandhan Milkman"} height={50} />
             <div>
                 <p className="eyebrow">BizBandhan</p>
                 <p className="brand-name">Milkman</p>
@@ -19,14 +21,46 @@ export default function Navbar({ isAuthenticated, onSignIn }) {
             <a href="#audience">Who it serves</a>
         </nav>
 
-        { isAuthenticated ? (
-            <button className="nav-cta" type="button" onClick={ () => navigateTo('/dashboard') }>
-                My Account
-            </button>
+        {isAuthenticated ? (
+            <UserMenu user={user} pravah={pravah} />
         ) : (
-            <button className="nav-cta" type="button" onClick={ signIn }>
+            <button className="nav-cta" type="button" onClick={signIn}>
                 Sign in
             </button>
-        ) }
+        )}
     </header>
+}
+function UserMenu({ user, pravah }) {
+    const [showMenu, setShowMenu] = React.useState(false);
+    return <div className="user-menu"
+        tabIndex={0}
+        onBlur={
+            (e) => {
+                setShowMenu(false)
+            }}
+    >
+        <button
+            className="nav-cta"
+            type="button"
+            onClick={() => { setShowMenu(!showMenu) }}
+        >
+            <i className="fa-solid fa-user" />
+            <span className="user-name">{user?.value?.name}</span>
+        </button>
+        {
+            showMenu
+            && <ul className="user-menu-dropdown">
+                <li>
+                    <button type="button" onClick={() => { navigateTo("/dashboard") }}>
+                        Dashboard
+                    </button>
+                </li>
+                <li>
+                    <button type="button" onClick={() => { pravah.logout() }}>
+                        Sign out
+                    </button>
+                </li>
+            </ul>
+        }
+    </div>
 }

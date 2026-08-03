@@ -2,19 +2,13 @@ import mongoose from "mongoose";
 import { MongooseModel } from "express-web-tools";
 
 let schema = new MongooseModel(
-    "Product",
+    "Milkshop",
     new mongoose.Schema({
         name: {
             type: String,
             required: true,
             lowercase: true
         },
-        phone: [{
-            type: String,
-        }],
-        email: [{
-            type: String
-        }],
         address: {
             type: String
         },
@@ -25,7 +19,11 @@ let schema = new MongooseModel(
             qr: {
                 type: String
             }
-        }
+        },
+        members:[{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User"
+        }]
     }),
     [
         [
@@ -45,4 +43,6 @@ let schema = new MongooseModel(
         timestamps: true
     }
 );
-export default schema.model();
+const milkshop= schema.model();
+
+export { milkshop }

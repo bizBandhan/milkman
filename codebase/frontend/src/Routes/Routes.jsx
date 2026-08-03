@@ -10,7 +10,7 @@ export function Routes() {
     usePravahListener(pravah, `login-${pravahState?.pravahId}`, async () => {
         window.location.reload()
     })
-    console.log({pravahState,user})
+    console.log({ pravahState, user })
     return useRoutes([
         {
             path: "*",
@@ -19,15 +19,39 @@ export function Routes() {
                 : user.loggedIn
                     ? [undefined, "", null].includes(user?.value?.role)
                         ? <VisitorRoutes user={user} pravah={pravah} />
-                        : <MemberRoutes user={ user } />
+                        : <MemberRoutes {...{ user, pravah }} />
                     : <VisitorRoutes user={user} pravah={pravah} />
         }
     ])
 }
-function MemberRoutes({ user }) {
-    return <pre>{ JSON.stringify(user, null, 2) }</pre>
+function MilkmanRoutes({ user, pravah }) {
+    return useRoutes([
+        {
+            path:"/",
+            element: <Layout.Milkman user={user} pravah={pravah} />,
+            children: [
+                {
+                    path: "/dashboard",
+                    element: <>Milkman Dashboard <Outlet /></>
+                }
+            ]
+        }
+    ])
 }
-function VisitorRoutes({user,pravah}) {
+function ConsumerRoutes({ user, pravah }) {
+    return <></>
+}
+function MemberRoutes({ user, pravah }) {
+    switch (user?.value?.role) {
+        case "milkman":
+            return <MilkmanRoutes {...{ user, pravah }} />
+        case "consumer":
+            return <ConsumerRoutes {...{ user, pravah }} />
+        default:
+            return <VisitorRoutes user={user} pravah={pravah} />
+    }
+}
+function VisitorRoutes({ user, pravah }) {
     return useRoutes([
         {
             path: "/",

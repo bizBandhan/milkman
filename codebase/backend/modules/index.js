@@ -19,6 +19,7 @@ eventStream.addListener("fallback", (e) => {
 let router = Router();
 router
     .use(authRoutes)
+    // todo: Add isAuthenticated middleware to protect 
     .use("/config", configRouter)
 
 export default router;
