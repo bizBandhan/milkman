@@ -69,10 +69,10 @@ function VisitorRoutes({ user, pravah }) {
                 }
             ]
         },
-        {
-            path: "*",
-            element: <Navigate to="/" />
-        }
+        // {
+        //     path: "*",
+        //     element: <Navigate to="/" />
+        // }
     ])
 }
 function Loading() {

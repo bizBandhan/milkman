@@ -1,4 +1,4 @@
-import { asyncHandler } from "express-web-tools";
+import { asyncHandler, HttpError } from "express-web-tools";
 import { User as userController } from "../controller/index.js";
 
 const isAuthenticated = asyncHandler(

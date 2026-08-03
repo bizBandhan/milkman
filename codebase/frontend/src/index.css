@@ -47,7 +47,13 @@ select {
 a {
   color: inherit;
 }
-
+.flex-end{
+  display: flex;
+  justify-content: flex-end;
+}
+.small{
+  font-size: 0.7rem;
+}
 .nav-cta .user-name {
   max-width: 3rem;
   overflow: hidden;
@@ -89,29 +95,3 @@ a {
   }
 
 }
-
-/*
-
-
-
-
-
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background-image:
-    linear-gradient(rgba(108, 93, 44, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(108, 93, 44, 0.05) 1px, transparent 1px);
-  background-size: 36px 36px;
-  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.5), transparent 82%);
-}
-
-#root {
-  width: min(1200px, 100%);
-  margin: 0 auto;
-  min-height: 100vh;
-}
-
-//*/
