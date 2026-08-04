@@ -4,6 +4,7 @@ import { Navbar, Modal } from "../components";
 import { api, loadData } from "../utils";
 
 export function Milkman({ user, pravah }) {
+    const [showBusinessModal, setShowBusinessModal] = React.useState(false);
     const [isLoading, setIsLoading] = React.useState(true);
     const [business, setBusiness] = React.useState(null);
 
@@ -19,10 +20,13 @@ export function Milkman({ user, pravah }) {
             () => { setIsLoading(false) }
         );
     }, [user, pravah]);
-    // return <pre>{JSON.stringify({ business }, null, 2)}</pre>
+    function onMyBusiness() {
+        setShowBusinessModal(true);
+    }
+    
     return (<div className="home">
-        <Navbar {...{ user, pravah }} />
-        <Modal.Business {...{ user, pravah, business }} />
+        <Navbar {...{ user, pravah,onMyBusiness }} />
+        {showBusinessModal && <Modal.Business {...{ user, pravah, business,onClose: () => setShowBusinessModal(false) }} />}
         <Outlet />
     </div>)
 }

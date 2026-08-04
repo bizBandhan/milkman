@@ -1,7 +1,7 @@
 import React from "react";
 import { navigateTo } from "../utils";
 
-export default function Navbar({ onSignIn, user, pravah }) {
+export default function Navbar({ onSignIn, user, pravah, onMyBusiness }) {
     const isAuthenticated = user?.loggedIn && [undefined, "", null].includes(user?.value?.role) === false;
     function signIn() {
         if (onSignIn) onSignIn("auth")
@@ -22,7 +22,7 @@ export default function Navbar({ onSignIn, user, pravah }) {
         </nav>
 
         {isAuthenticated ? (
-            <UserMenu user={user} pravah={pravah} />
+            <UserMenu user={user} pravah={pravah} onMyBusiness={onMyBusiness} />
         ) : (
             <button className="nav-cta" type="button" onClick={signIn}>
                 Sign in
@@ -30,12 +30,13 @@ export default function Navbar({ onSignIn, user, pravah }) {
         )}
     </header>
 }
-function UserMenu({ user, pravah }) {
+function UserMenu({ user, pravah, onMyBusiness }) {
     const [showMenu, setShowMenu] = React.useState(false);
     return <div className="user-menu"
         tabIndex={0}
         onBlur={
             (e) => {
+                if (e.currentTarget.contains(e.relatedTarget)) return;
                 setShowMenu(false)
             }}
     >
@@ -55,6 +56,12 @@ function UserMenu({ user, pravah }) {
                         Dashboard
                     </button>
                 </li>
+                <li><button type="button" onClick={() => {
+                    console.log(onMyBusiness)
+                    onMyBusiness()
+                }}>
+                    My Business
+                </button></li>
                 <li>
                     <button type="button" onClick={() => { pravah.logout() }}>
                         Sign out
