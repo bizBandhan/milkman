@@ -44,6 +44,7 @@ export function MemberProvider({ children }) {
                 loadData(
                     api.delete(`/api/v1/me`),
                     () => {
+                        setMe(null);
                         setReload(old => (old + 1) % 10);
                     },
                     () => { setIsLoading(false) }

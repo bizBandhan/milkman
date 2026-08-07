@@ -42,5 +42,14 @@ router
         )
     )
     .patch(async (req, res) => { res.json({ status: "success", message: "Not implemented" }) })
-    .delete(async (req, res) => { res.json({ status: "success", message: "Not implemented" }) })
+    .delete(
+        asyncHandler(
+            async (req, res) => {
+                const { pravah_id } = req.cookies;
+                userController.request = req;
+                const data = await userController.logout(pravah_id);
+                res.json({ status: "success", message: "", data })
+            }
+        )
+    )
 export default router;

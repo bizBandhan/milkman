@@ -63,7 +63,7 @@ function UserMenu({ user, pravah, onMyBusiness }) {
                     My Business
                 </button></li>
                 <li>
-                    <button type="button" onClick={() => { pravah.logout() }}>
+                    <button type="button" onClick={() => { user.logout() }}>
                         Sign out
                     </button>
                 </li>

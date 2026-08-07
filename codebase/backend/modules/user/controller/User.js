@@ -9,6 +9,13 @@ class User extends CrudController {
         if (!user) throw new HttpError(401, "Authentication required")
         return user;
     }
+    
+    async logout(device){
+        if(!device)throw new HttpError(401,"Device not identified");
+        let user=this.request.user;
+        user.activeDevices=user.activeDevices.filter(d=>d.pravahID!=device);
+        return await this.update(user._id,{activeDevices:user.activeDevices})
+    }
     register() { }
     subscribe() { }
     unsubscribe() { }
