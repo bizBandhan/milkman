@@ -1,0 +1,22 @@
+[
+  {
+    "id": "pay_1",
+    "customerId": "cust_103",
+    "customerName": "Rajesh Gupta & Sons",
+    "amount": 1800,
+    "method": "UPI",
+    "txnRef": "UPI-4091823901",
+    "date": "2026-08-07",
+    "note": "GPay QR Scan"
+  },
+  {
+    "id": "pay_2",
+    "customerId": "cust_104",
+    "customerName": "Priya Mukherjee",
+    "amount": 600,
+    "method": "Cash",
+    "txnRef": "CASH-REC-12",
+    "date": "2026-08-06",
+    "note": "Handed morning run"
+  }
+]

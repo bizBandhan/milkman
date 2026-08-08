@@ -1,0 +1,80 @@
+[
+  {
+    "id": "cust_101",
+    "name": "Sharma Household (Flat 402)",
+    "phone": "9810012345",
+    "address": "Flat 402, Sunshine Heights, North Sector A",
+    "route": "North Sector A",
+    "milkType": "Cow Milk",
+    "quantityLiters": 2.0,
+    "pricePerLiter": 65,
+    "shift": "Morning",
+    "status": "active",
+    "balance": 840
+  },
+  {
+    "id": "cust_102",
+    "name": "Dr. Ananya Verma",
+    "phone": "9871122334",
+    "address": "Villa 12, Green Park Avenue",
+    "route": "Green Park Route",
+    "milkType": "Buffalo Milk",
+    "quantityLiters": 1.5,
+    "pricePerLiter": 72,
+    "shift": "Morning",
+    "status": "active",
+    "balance": 1250
+  },
+  {
+    "id": "cust_103",
+    "name": "Rajesh Gupta & Sons",
+    "phone": "9958844332",
+    "address": "House 88, Block C, South Colony",
+    "route": "South Colony",
+    "milkType": "Cow Milk",
+    "quantityLiters": 3.0,
+    "pricePerLiter": 65,
+    "shift": "Both",
+    "status": "active",
+    "balance": 0
+  },
+  {
+    "id": "cust_104",
+    "name": "Priya Mukherjee",
+    "phone": "9818833221",
+    "address": "Apt 201, Central Towers",
+    "route": "Central Apartments",
+    "milkType": "Full Cream Milk",
+    "quantityLiters": 1.0,
+    "pricePerLiter": 68,
+    "shift": "Morning",
+    "status": "active",
+    "balance": 480
+  },
+  {
+    "id": "cust_105",
+    "name": "Suresh Patel (Store)",
+    "phone": "9711122445",
+    "address": "Corner Shop, Market Road, North Sector A",
+    "route": "North Sector A",
+    "milkType": "Buffalo Milk",
+    "quantityLiters": 5.0,
+    "pricePerLiter": 72,
+    "shift": "Morning",
+    "status": "active",
+    "balance": 2100
+  },
+  {
+    "id": "cust_106",
+    "name": "Vikram Singh",
+    "phone": "9899001122",
+    "address": "House 14B, Green Park Avenue",
+    "route": "Green Park Route",
+    "milkType": "Cow Milk",
+    "quantityLiters": 1.5,
+    "pricePerLiter": 65,
+    "shift": "Evening",
+    "status": "paused",
+    "balance": 0
+  }
+]

@@ -1,16 +1,20 @@
+import React from "react";
 import { Navigate, Outlet, useRoutes } from "react-router-dom";
+import { usePravahListener, usePravahState, usePravahContext } from "pravah-sdk";
 import { useMember } from "../context";
 import * as Layout from "../Layouts";
-import { usePravahListener, usePravahState, usePravahContext } from "pravah-sdk";
+import { MilkmanDashboard } from "../pages";
+import { api, loadData } from "../utils"
+
 export function Routes() {
     const user = useMember();
     const pravah = usePravahContext();
     const pravahState = usePravahState(pravah, "connected");
 
     usePravahListener(pravah, `login-${pravahState?.pravahId}`, async () => {
-        window.location.reload()
-    })
-    console.log({ pravahState, user })
+        window.location.reload();
+    });
+
     return useRoutes([
         {
             path: "*",
@@ -22,59 +26,109 @@ export function Routes() {
                         : <MemberRoutes {...{ user, pravah }} />
                     : <VisitorRoutes user={user} pravah={pravah} />
         }
-    ])
+    ]);
 }
+
 function MilkmanRoutes({ user, pravah }) {
-    return useRoutes([
-        {
-            path:"/",
-            element: <Layout.Milkman user={user} pravah={pravah} />,
-            children: [
-                {
-                    path: "/dashboard",
-                    element: <>Milkman Dashboard <Outlet /></>
-                }
-            ]
-        }
-    ])
-}
-function ConsumerRoutes({ user, pravah }) {
-    return <></>
-}
-function MemberRoutes({ user, pravah }) {
-    switch (user?.value?.role) {
-        case "milkman":
-            return <MilkmanRoutes {...{ user, pravah }} />
-        case "consumer":
-            return <ConsumerRoutes {...{ user, pravah }} />
-        default:
-            return <VisitorRoutes user={user} pravah={pravah} />
-    }
-}
-function VisitorRoutes({ user, pravah }) {
+    const [business, setBusiness] = React.useState(null);
+    const [isLoading, setIsLoading] = React.useState(true);
+    React.useEffect(() => {
+        setIsLoading(true);
+        loadData(
+            api.get("/api/v1/seller"),
+            resp => {
+                ("data" in resp)
+                    ? setBusiness(resp?.data?.pop())
+                    : null
+            },
+            () => { setIsLoading(false) }
+        );
+    }, [user, pravah]);
+
     return useRoutes([
         {
             path: "/",
-            element: <Layout.Visitor user={user} pravah={pravah} />,
+            element: isLoading?<>Loading</>:<Layout.Milkman {...{ user, pravah, business }} />,
             children: [
                 {
-                    path: "/policy",
-                    element: <>Policy Page <Outlet /></>,
-                    children: [
-                        {
-                            path: "/policy/privacy",
-                            element: <>Privacy Policy</>
-                        }
-                    ]
+                    path: "dashboard",
+                    element: <MilkmanDashboard {...{ user, pravah, business }} />
+                },
+                {
+                    path: "dashboard/*",
+                    element: <MilkmanDashboard {...{ user, pravah, business }} />
+                },
+                {
+                    path: "",
+                    element: <MilkmanDashboard {...{ user, pravah, business }} />
+                }
+            ]
+        }
+    ]);
+}
+
+function ConsumerRoutes({ user, pravah }) {
+    return <></>;
+}
+
+function MemberRoutes({ user, pravah }) {
+    switch (user?.value?.role) {
+        case "milkman":
+            return <MilkmanRoutes {...{ user, pravah }} />;
+        case "consumer":
+            return <ConsumerRoutes {...{ user, pravah }} />;
+        default:
+            return <VisitorRoutes user={user} pravah={pravah} />;
+    }
+}
+
+function VisitorRoutes({ user, pravah }) {
+    return useRoutes([
+        {
+            path: "dashboard",
+            element: <Layout.Milkman user={user} pravah={pravah} />,
+            children: [
+                {
+                    path: "",
+                    element: <MilkmanDashboard user={user} pravah={pravah} />
+                },
+                {
+                    path: "*",
+                    element: <MilkmanDashboard user={user} pravah={pravah} />
                 }
             ]
         },
-        // {
-        //     path: "*",
-        //     element: <Navigate to="/" />
-        // }
-    ])
+        {
+            path: "dashboard/*",
+            element: <Layout.Milkman user={user} pravah={pravah} />,
+            children: [
+                {
+                    path: "",
+                    element: <MilkmanDashboard user={user} pravah={pravah} />
+                }
+            ]
+        },
+        {
+            path: "policy",
+            element: <>Policy Page <Outlet /></>,
+            children: [
+                {
+                    path: "privacy",
+                    element: <>Privacy Policy</>
+                }
+            ]
+        },
+        {
+            path: "/",
+            element: <Layout.Visitor user={user} pravah={pravah} />
+        },
+        {
+            path: "*",
+            element: <Layout.Visitor user={user} pravah={pravah} />
+        }
+    ]);
 }
+
 function Loading() {
-    return <>Loading</>
+    return <>Loading...</>;
 }

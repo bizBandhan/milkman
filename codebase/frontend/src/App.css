@@ -509,7 +509,7 @@
 .auth-overlay {
 	position: fixed;
 	inset: 0;
-	z-index: 30;
+	z-index: 1030;
 	display: grid;
 	place-items: center;
 	padding: 1.25rem;

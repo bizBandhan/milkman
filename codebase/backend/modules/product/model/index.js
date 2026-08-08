@@ -19,7 +19,21 @@ let schema = new MongooseModel(
         },
         stepSize: {
             type: Number,
-            required: true
+            required: true,
+            default: 0.25
+        },
+        price: {
+            type: Number,
+            required: true,
+            default: 65
+        },
+        minimumOrder: {
+            type: Number,
+            default: 0.5
+        },
+        totalAvailability: {
+            type: Number,
+            default: 20
         }
     }),
     [

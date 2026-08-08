@@ -1,0 +1,593 @@
+import React, { useState, useEffect } from 'react';
+import {
+  Milk,
+  Truck,
+  Users,
+  CreditCard,
+  BarChart3,
+  Sun,
+  Moon,
+  Laptop,
+  Plus,
+  RefreshCw,
+  Wifi,
+  WifiOff,
+  CheckCircle2,
+  AlertCircle,
+  Sparkles,
+  DollarSign,
+  TrendingUp,
+  Layers,
+  Package,
+  Settings
+} from 'lucide-react';
+import './MilkmanDashboard.css';
+
+import { DeliveryRouteTab } from './tabs/DeliveryRouteTab';
+import { CustomerDirectoryTab } from './tabs/CustomerDirectoryTab';
+import { ProductsTab } from './tabs/ProductsTab';
+import { MilkStockTab } from './tabs/MilkStockTab';
+import { LedgerPaymentsTab } from './tabs/LedgerPaymentsTab';
+import { AnalyticsTab } from './tabs/AnalyticsTab';
+import { SettingsTab } from './tabs/SettingsTab';
+
+import { AddCustomerModal } from './modals/AddCustomerModal';
+import { AddProductModal } from './modals/AddProductModal';
+import { RecordPaymentModal } from './modals/RecordPaymentModal';
+import { DeliveryDetailsModal } from './modals/DeliveryDetailsModal';
+import { WhatsAppReminderModal } from './modals/WhatsAppReminderModal';
+
+import { api, loadData } from '../../utils';
+
+export function MilkmanDashboard({ user, pravah, business }) {
+  // Theme State: 'system' | 'light' | 'dark'
+  const [theme, setTheme] = useState(() => localStorage.getItem('mk-theme') || 'system');
+
+  // Active Tab: 'route' | 'products' | 'customers' | 'stock' | 'ledger' | 'analytics' | 'settings'
+  const [activeTab, setActiveTab] = useState('route');
+
+  // Data State Initialized Empty, populated via api.get and loadData from public/data/
+  const [products, setProducts] = useState([]);
+  const [customers, setCustomers] = useState([]);
+  const [deliveries, setDeliveries] = useState([]);
+  const [payments, setPayments] = useState([]);
+
+  // Filter States
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedRoute, setSelectedRoute] = useState('All');
+  const [selectedShift, setSelectedShift] = useState('All');
+
+  // Modals Control
+  const [isAddCustomerOpen, setIsAddCustomerOpen] = useState(false);
+  const [editingCustomer, setEditingCustomer] = useState(null);
+
+  const [isAddProductOpen, setIsAddProductOpen] = useState(false);
+  const [editingProduct, setEditingProduct] = useState(null);
+
+  const [isRecordPaymentOpen, setIsRecordPaymentOpen] = useState(false);
+  const [selectedPaymentCust, setSelectedPaymentCust] = useState(null);
+
+  const [selectedDeliveryItem, setSelectedDeliveryItem] = useState(null);
+  const [whatsAppCustomer, setWhatsAppCustomer] = useState(null);
+
+  // Sync state
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+  useEffect(() => {
+    localStorage.setItem('mk-theme', theme);
+  }, [theme]);
+
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
+  // Fetch initial data from public/data/*.json using utils/api & loadData
+  useEffect(() => {
+    // 1. Fetch Products
+    const savedProducts = localStorage.getItem('mk_products_data');
+    if (savedProducts) {
+      try {
+        setProducts(JSON.parse(savedProducts));
+      } catch (e) {
+        console.error(e);
+      }
+    } else {
+      loadData(
+        api.get('/data/products.json'),
+        (res) => {
+          if (Array.isArray(res)) setProducts(res);
+        },
+        () => { }
+      );
+    }
+
+    // 2. Fetch Customers
+    const savedCustomers = localStorage.getItem('mk_customers_data');
+    if (savedCustomers) {
+      try {
+        setCustomers(JSON.parse(savedCustomers));
+      } catch (e) {
+        console.error(e);
+      }
+    } else {
+      loadData(
+        api.get('/data/customers.json'),
+        (res) => {
+          if (Array.isArray(res)) setCustomers(res);
+        },
+        () => { }
+      );
+    }
+
+    // 3. Fetch Deliveries
+    const savedDeliveries = localStorage.getItem('mk_deliveries_data');
+    if (savedDeliveries) {
+      try {
+        setDeliveries(JSON.parse(savedDeliveries));
+      } catch (e) {
+        console.error(e);
+      }
+    } else {
+      loadData(
+        api.get('/data/deliveries.json'),
+        (res) => {
+          if (Array.isArray(res)) setDeliveries(res);
+        },
+        () => { }
+      );
+    }
+
+    // 4. Fetch Payments
+    const savedPayments = localStorage.getItem('mk_payments_data');
+    if (savedPayments) {
+      try {
+        setPayments(JSON.parse(savedPayments));
+      } catch (e) {
+        console.error(e);
+      }
+    } else {
+      loadData(
+        api.get('/data/payments.json'),
+        (res) => {
+          if (Array.isArray(res)) setPayments(res);
+        },
+        () => { }
+      );
+    }
+  }, []);
+
+  // Persistence to local storage when state updates
+  useEffect(() => {
+    if (products.length > 0) {
+      localStorage.setItem('mk_products_data', JSON.stringify(products));
+    }
+  }, [products]);
+
+  useEffect(() => {
+    if (customers.length > 0) {
+      localStorage.setItem('mk_customers_data', JSON.stringify(customers));
+    }
+  }, [customers]);
+
+  useEffect(() => {
+    if (deliveries.length > 0) {
+      localStorage.setItem('mk_deliveries_data', JSON.stringify(deliveries));
+    }
+  }, [deliveries]);
+
+  useEffect(() => {
+    if (payments.length > 0) {
+      localStorage.setItem('mk_payments_data', JSON.stringify(payments));
+    }
+  }, [payments]);
+
+  // Handlers for Products Management
+  const handleSaveProduct = (productData) => {
+    if (editingProduct) {
+      setProducts((prev) => prev.map((p) => (p.id === productData.id ? productData : p)));
+      setEditingProduct(null);
+    } else {
+      setProducts((prev) => [productData, ...prev]);
+    }
+  };
+
+  const handleDeleteProduct = (id) => {
+    if (window.confirm('Are you sure you want to delete this product variant?')) {
+      setProducts((prev) => prev.filter((p) => p.id !== id));
+    }
+  };
+
+  // Handlers for Delivery Status
+  const handleToggleStatus = (id, newStatus) => {
+    setDeliveries((prev) =>
+      prev.map((d) => {
+        if (d.id === id) {
+          const nowTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          return {
+            ...d,
+            status: newStatus,
+            updatedAt: newStatus === 'delivered' ? nowTime : d.updatedAt
+          };
+        }
+        return d;
+      })
+    );
+  };
+
+  const handleAdjustQty = (id, delta) => {
+    setDeliveries((prev) =>
+      prev.map((d) => {
+        if (d.id === id) {
+          const current = d.deliveredQty ?? d.quantityLiters;
+          const updated = Math.max(0, Math.round((current + delta) * 100) / 100);
+          return { ...d, deliveredQty: updated };
+        }
+        return d;
+      })
+    );
+  };
+
+  // Handlers for Customer Management
+  const handleSaveCustomer = (custData) => {
+    if (editingCustomer) {
+      setCustomers((prev) => prev.map((c) => (c.id === custData.id ? custData : c)));
+      setEditingCustomer(null);
+    } else {
+      setCustomers((prev) => [custData, ...prev]);
+
+      const newDelivery = {
+        id: `del_${Date.now()}`,
+        customerId: custData.id,
+        customerName: custData.name,
+        address: custData.address,
+        route: custData.route,
+        milkType: custData.milkType,
+        quantityLiters: custData.quantityLiters,
+        deliveredQty: custData.quantityLiters,
+        shift: custData.shift,
+        status: custData.status === 'active' ? 'pending' : 'paused',
+        updatedAt: '',
+        notes: ''
+      };
+      setDeliveries((prev) => [newDelivery, ...prev]);
+    }
+  };
+
+  const handleDeleteCustomer = (id) => {
+    if (window.confirm('Are you sure you want to remove this household from your route?')) {
+      setCustomers((prev) => prev.filter((c) => c.id !== id));
+      setDeliveries((prev) => prev.filter((d) => d.customerId !== id));
+    }
+  };
+
+  const handleSavePayment = (paymentData) => {
+    setPayments((prev) => [paymentData, ...prev]);
+    setCustomers((prev) =>
+      prev.map((c) => {
+        if (c.id === paymentData.customerId) {
+          const newBal = Math.max(0, (c.balance || 0) - paymentData.amount);
+          return { ...c, balance: newBal };
+        }
+        return c;
+      })
+    );
+  };
+
+  const handleManualSync = () => {
+    setIsSyncing(true);
+    // Reload seed data via API
+    loadData(
+      Promise.all([
+        api.get('/data/products.json'),
+        api.get('/data/customers.json'),
+        api.get('/data/deliveries.json'),
+        api.get('/data/payments.json')
+      ]),
+      ([prodRes, custRes, delRes, payRes]) => {
+        if (Array.isArray(prodRes)) setProducts(prodRes);
+        if (Array.isArray(custRes)) setCustomers(custRes);
+        if (Array.isArray(delRes)) setDeliveries(delRes);
+        if (Array.isArray(payRes)) setPayments(payRes);
+      },
+      () => {
+        setIsSyncing(false);
+      }
+    );
+  };
+
+  const routesList = Array.from(new Set(deliveries.map((d) => d.route)));
+  // return <pre>{JSON.stringify(business,null,2)}</pre>
+  return (
+    <div className="mk-dashboard-container" data-dashboard-theme={theme}>
+      <div className="mk-dashboard-wrapper">
+        {/* Top Header Bar with Top Right Aligned Sync Button */}
+        <header className="mk-header">
+          <div className="mk-header-title-group">
+            {/* <div className="mk-header-icon">
+              <Milk size={24} />
+            </div> */}
+            <div>
+              <h1 className="mk-header-title">{business?.name ?? ""}</h1>
+              <p className="mk-header-subtitle">
+                <span>Daily Delivery Route & Operations</span>
+                <span className={`mk-badge-status ${isOnline ? 'online' : 'offline'}`}>
+                  <span className="mk-pulse-dot" />
+                  {isOnline ? 'Online' : 'Offline'}
+                </span>
+              </p>
+            </div>
+          </div>
+
+          {/* Top Right Corner Aligned Sync Button */}
+          <div className="mk-header-controls">
+            <button className="mk-btn-secondary" type="button" onClick={handleManualSync} disabled={isSyncing}>
+              <RefreshCw size={15} className={isSyncing ? 'spin-icon' : ''} />
+              {isSyncing ? 'Syncing...' : 'Sync'}
+            </button>
+          </div>
+        </header>
+
+        <nav className="mk-tabs-nav desktop-only">
+          <button
+            type="button"
+            className={`mk-tab-item ${activeTab === 'route' ? 'active' : ''}`}
+            onClick={() => setActiveTab('route')}
+          >
+            <Truck size={17} /> Daily Route & Swipe-Sheet ({deliveries.length})
+          </button>
+
+          <button
+            type="button"
+            className={`mk-tab-item ${activeTab === 'products' ? 'active' : ''}`}
+            onClick={() => setActiveTab('products')}
+          >
+            <Package size={17} /> Products Catalog ({products.length})
+          </button>
+
+          <button
+            type="button"
+            className={`mk-tab-item ${activeTab === 'customers' ? 'active' : ''}`}
+            onClick={() => setActiveTab('customers')}
+          >
+            <Users size={17} /> Household Directory ({customers.length})
+          </button>
+
+          <button
+            type="button"
+            className={`mk-tab-item ${activeTab === 'stock' ? 'active' : ''}`}
+            onClick={() => setActiveTab('stock')}
+          >
+            <Milk size={17} /> Stock & Crate Planning
+          </button>
+
+          <button
+            type="button"
+            className={`mk-tab-item ${activeTab === 'ledger' ? 'active' : ''}`}
+            onClick={() => setActiveTab('ledger')}
+          >
+            <CreditCard size={17} /> Ledger & Payments
+          </button>
+
+          <button
+            type="button"
+            className={`mk-tab-item ${activeTab === 'analytics' ? 'active' : ''}`}
+            onClick={() => setActiveTab('analytics')}
+          >
+            <BarChart3 size={17} /> Performance Insights
+          </button>
+
+          <button
+            type="button"
+            className={`mk-tab-item ${activeTab === 'settings' ? 'active' : ''}`}
+            onClick={() => setActiveTab('settings')}
+          >
+            <Settings size={17} /> Settings
+          </button>
+        </nav>
+
+        {/* Tab View Container */}
+        <main>
+          {activeTab === 'route' && (
+            <DeliveryRouteTab
+              deliveries={deliveries}
+              onToggleStatus={handleToggleStatus}
+              onAdjustQty={handleAdjustQty}
+              onOpenDetails={(item) => setSelectedDeliveryItem(item)}
+              onOpenWhatsApp={(item) => {
+                const cust = customers.find((c) => c.id === item.customerId) || {
+                  name: item.customerName,
+                  phone: '9810012345',
+                  quantityLiters: item.quantityLiters,
+                  milkType: item.milkType,
+                  balance: 840
+                };
+                setWhatsAppCustomer(cust);
+              }}
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              selectedRoute={selectedRoute}
+              setSelectedRoute={setSelectedRoute}
+              routesList={routesList}
+              selectedShift={selectedShift}
+              setSelectedShift={setSelectedShift}
+            />
+          )}
+
+          {activeTab === 'products' && (
+            <ProductsTab
+              products={products}
+              deliveries={deliveries}
+              onAddProduct={() => {
+                setEditingProduct(null);
+                setIsAddProductOpen(true);
+              }}
+              onEditProduct={(prod) => {
+                setEditingProduct(prod);
+                setIsAddProductOpen(true);
+              }}
+              onDeleteProduct={handleDeleteProduct}
+            />
+          )}
+
+          {activeTab === 'customers' && (
+            <CustomerDirectoryTab
+              customers={customers}
+              onAddCustomer={() => {
+                setEditingCustomer(null);
+                setIsAddCustomerOpen(true);
+              }}
+              onEditCustomer={(cust) => {
+                setEditingCustomer(cust);
+                setIsAddCustomerOpen(true);
+              }}
+              onDeleteCustomer={handleDeleteCustomer}
+              onOpenWhatsApp={(cust) => setWhatsAppCustomer(cust)}
+              onRecordPayment={(cust) => {
+                setSelectedPaymentCust(cust);
+                setIsRecordPaymentOpen(true);
+              }}
+            />
+          )}
+
+          {activeTab === 'stock' && <MilkStockTab deliveries={deliveries} customers={customers} />}
+
+          {activeTab === 'ledger' && (
+            <LedgerPaymentsTab
+              payments={payments}
+              customers={customers}
+              onRecordPayment={(cust) => {
+                setSelectedPaymentCust(cust || null);
+                setIsRecordPaymentOpen(true);
+              }}
+              onOpenWhatsApp={(cust) => setWhatsAppCustomer(cust)}
+            />
+          )}
+
+          {activeTab === 'analytics' && (
+            <AnalyticsTab deliveries={deliveries} customers={customers} payments={payments} />
+          )}
+
+          {activeTab === 'settings' && (
+            <SettingsTab theme={theme} setTheme={setTheme} onSyncData={handleManualSync} />
+          )}
+        </main>
+      </div>
+
+      <nav className="mk-bottom-nav-mobile">
+        <button
+          type="button"
+          className={`mk-bottom-nav-item ${activeTab === 'route' ? 'active' : ''}`}
+          onClick={() => setActiveTab('route')}
+        >
+          <div className="mk-bottom-icon-box">
+            <Truck size={20} />
+          </div>
+          <span>Route</span>
+        </button>
+
+        <button
+          type="button"
+          className={`mk-bottom-nav-item ${activeTab === 'products' ? 'active' : ''}`}
+          onClick={() => setActiveTab('products')}
+        >
+          <div className="mk-bottom-icon-box">
+            <Package size={20} />
+          </div>
+          <span>Products</span>
+        </button>
+
+        <button
+          type="button"
+          className={`mk-bottom-nav-item ${activeTab === 'customers' ? 'active' : ''}`}
+          onClick={() => setActiveTab('customers')}
+        >
+          <div className="mk-bottom-icon-box">
+            <Users size={20} />
+          </div>
+          <span>Households</span>
+        </button>
+
+        <button
+          type="button"
+          className={`mk-bottom-nav-item ${activeTab === 'ledger' ? 'active' : ''}`}
+          onClick={() => setActiveTab('ledger')}
+        >
+          <div className="mk-bottom-icon-box">
+            <CreditCard size={20} />
+          </div>
+          <span>Ledger</span>
+        </button>
+
+        <button
+          type="button"
+          className={`mk-bottom-nav-item ${activeTab === 'settings' ? 'active' : ''}`}
+          onClick={() => setActiveTab('settings')}
+        >
+          <div className="mk-bottom-icon-box">
+            <Settings size={20} />
+          </div>
+          <span>Settings</span>
+        </button>
+      </nav>
+
+      {/* Modals & Slide-Overs */}
+      <AddProductModal
+        isOpen={isAddProductOpen}
+        onClose={() => {
+          setIsAddProductOpen(false);
+          setEditingProduct(null);
+        }}
+        onSave={handleSaveProduct}
+        initialData={editingProduct}
+      />
+
+      <AddCustomerModal
+        isOpen={isAddCustomerOpen}
+        onClose={() => {
+          setIsAddCustomerOpen(false);
+          setEditingCustomer(null);
+        }}
+        onSave={handleSaveCustomer}
+        initialData={editingCustomer}
+        products={products}
+      />
+
+      <RecordPaymentModal
+        isOpen={isRecordPaymentOpen}
+        onClose={() => {
+          setIsRecordPaymentOpen(false);
+          setSelectedPaymentCust(null);
+        }}
+        customers={customers}
+        selectedCustomer={selectedPaymentCust}
+        onSavePayment={handleSavePayment}
+      />
+
+      <DeliveryDetailsModal
+        isOpen={Boolean(selectedDeliveryItem)}
+        onClose={() => setSelectedDeliveryItem(null)}
+        delivery={selectedDeliveryItem}
+        onUpdateDelivery={(updated) => {
+          setDeliveries((prev) => prev.map((d) => (d.id === updated.id ? updated : d)));
+        }}
+      />
+
+      <WhatsAppReminderModal
+        isOpen={Boolean(whatsAppCustomer)}
+        onClose={() => setWhatsAppCustomer(null)}
+        customer={whatsAppCustomer}
+      />
+    </div>
+  );
+}
+export default MilkmanDashboard;

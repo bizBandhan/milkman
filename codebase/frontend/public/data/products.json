@@ -1,0 +1,32 @@
+[
+  {
+    "id": "prod_cow",
+    "name": "Cow Milk",
+    "price": 65.0,
+    "unit": "Litre",
+    "stepSize": 0.25,
+    "minimumOrder": 0.5,
+    "totalAvailability": 20.0,
+    "description": "Farm fresh pure A2 Cow Milk"
+  },
+  {
+    "id": "prod_buffalo",
+    "name": "Buffalo Milk",
+    "price": 72.0,
+    "unit": "Litre",
+    "stepSize": 0.25,
+    "minimumOrder": 0.5,
+    "totalAvailability": 30.0,
+    "description": "High cream thick Buffalo Milk"
+  },
+  {
+    "id": "prod_fullcream",
+    "name": "Full Cream Milk",
+    "price": 68.0,
+    "unit": "Litre",
+    "stepSize": 0.5,
+    "minimumOrder": 0.5,
+    "totalAvailability": 25.0,
+    "description": "Pasteurized rich full cream milk"
+  }
+]
