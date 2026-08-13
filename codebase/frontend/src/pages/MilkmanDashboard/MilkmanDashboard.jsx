@@ -22,7 +22,7 @@ import {
   Settings
 } from 'lucide-react';
 import './MilkmanDashboard.css';
-
+import { useApiState } from "react-api-state";
 import { DeliveryRouteTab } from './tabs/DeliveryRouteTab';
 import { CustomerDirectoryTab } from './tabs/CustomerDirectoryTab';
 import { ProductsTab } from './tabs/ProductsTab';
@@ -41,10 +41,15 @@ import { api, loadData } from '../../utils';
 
 export function MilkmanDashboard({ user, pravah, business }) {
   // Theme State: 'system' | 'light' | 'dark'
+  const state1=useApiState({
+    endpoint:"/api/v1/me",
+    api
+  })
+  console.log(state1)
   const [theme, setTheme] = useState(() => localStorage.getItem('mk-theme') || 'system');
 
   // Active Tab: 'route' | 'products' | 'customers' | 'stock' | 'ledger' | 'analytics' | 'settings'
-  const [activeTab, setActiveTab] = useState('route');
+  const [activeTab, setActiveTab] = useState('products');
 
   // Data State Initialized Empty, populated via api.get and loadData from public/data/
   const [products, setProducts] = useState([]);
@@ -71,6 +76,7 @@ export function MilkmanDashboard({ user, pravah, business }) {
   const [whatsAppCustomer, setWhatsAppCustomer] = useState(null);
 
   // Sync state
+  const [showInfo, setShowInfo] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
@@ -313,13 +319,9 @@ export function MilkmanDashboard({ user, pravah, business }) {
         {/* Top Header Bar with Top Right Aligned Sync Button */}
         <header className="mk-header">
           <div className="mk-header-title-group">
-            {/* <div className="mk-header-icon">
-              <Milk size={24} />
-            </div> */}
             <div>
-              <h1 className="mk-header-title">{business?.name ?? ""}</h1>
+              <h1 className="mk-header-title capitalize">{business?.name ?? ""}</h1>
               <p className="mk-header-subtitle">
-                <span>Daily Delivery Route & Operations</span>
                 <span className={`mk-badge-status ${isOnline ? 'online' : 'offline'}`}>
                   <span className="mk-pulse-dot" />
                   {isOnline ? 'Online' : 'Offline'}
@@ -327,12 +329,23 @@ export function MilkmanDashboard({ user, pravah, business }) {
               </p>
             </div>
           </div>
-
-          {/* Top Right Corner Aligned Sync Button */}
           <div className="mk-header-controls">
-            <button className="mk-btn-secondary" type="button" onClick={handleManualSync} disabled={isSyncing}>
+            <button
+              onClick={e => { setShowInfo(!showInfo) }}
+              className={`mk-btn-${showInfo ? "primary" : "secondary"}`}
+              title="Show info"
+            >
+              <i className="fa-solid fa-info" />
+            </button>
+            <button
+              className="mk-btn-secondary"
+              type="button"
+              onClick={handleManualSync}
+              disabled={isSyncing}
+              title="Syncronize"
+            >
               <RefreshCw size={15} className={isSyncing ? 'spin-icon' : ''} />
-              {isSyncing ? 'Syncing...' : 'Sync'}
+              {/* {isSyncing ? 'Syncing...' : 'Sync'} */}
             </button>
           </div>
         </header>
@@ -395,11 +408,10 @@ export function MilkmanDashboard({ user, pravah, business }) {
           </button>
         </nav>
 
-        {/* Tab View Container */}
         <main>
           {activeTab === 'route' && (
             <DeliveryRouteTab
-              deliveries={deliveries}
+              {...{ showInfo, deliveries }}
               onToggleStatus={handleToggleStatus}
               onAdjustQty={handleAdjustQty}
               onOpenDetails={(item) => setSelectedDeliveryItem(item)}

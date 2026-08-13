@@ -3,7 +3,7 @@
 :root {
   --mk-font-sans: 'Avenir Next', Montserrat, 'Segoe UI', Roboto, sans-serif;
   --mk-font-heading: Iowan Old Style, 'Palatino Linotype', serif;
-  
+
   /* Light Theme - Matched with Visitor Page (Cream, Forest Green #2e7253, Warm Gold #f4cf87, Terracotta #d87940) */
   --mk-bg-app: #f6efe3;
   --mk-bg-surface: #fffdf6;
@@ -12,27 +12,27 @@
   --mk-bg-subtle-solid: #f5ede0;
   --mk-border-color: #e6d6c3;
   --mk-border-hover: #d8c4ab;
-  
+
   --mk-text-main: #050706;
   --mk-text-heading: #1c2d25;
   --mk-text-muted: #4a5a52;
   --mk-text-subtle: #7a8a82;
-  
+
   --mk-primary: #2e7253;
   --mk-primary-hover: #1e523a;
   --mk-primary-light: #e4f2eb;
   --mk-primary-border: #a3d4bd;
   --mk-primary-glow: rgba(46, 114, 83, 0.2);
-  
+
   --mk-accent-amber: #d87940;
   --mk-accent-amber-light: #fdf0e6;
   --mk-accent-gold: #f4cf87;
-  
+
   --mk-accent-blue: #1b6a8c;
   --mk-accent-blue-light: #eaf4f8;
   --mk-accent-rose: #c83838;
   --mk-accent-rose-light: #fdebeb;
-  
+
   --mk-card-shadow: 0 4px 12px rgba(135, 71, 31, 0.06), 0 2px 4px rgba(0, 0, 0, 0.03);
   --mk-card-shadow-hover: 0 10px 22px rgba(135, 71, 31, 0.12), 0 4px 8px rgba(0, 0, 0, 0.05);
   --mk-glass-bg: rgba(255, 253, 246, 0.92);
@@ -48,27 +48,27 @@
   --mk-bg-subtle-solid: #202b26;
   --mk-border-color: #2e3e37;
   --mk-border-hover: #3d5248;
-  
+
   --mk-text-main: #f5efe6;
   --mk-text-heading: #ffffff;
   --mk-text-muted: #a0b2aa;
   --mk-text-subtle: #6c7f76;
-  
+
   --mk-primary: #3da878;
   --mk-primary-hover: #2e7253;
   --mk-primary-light: rgba(61, 168, 120, 0.15);
   --mk-primary-border: rgba(61, 168, 120, 0.35);
   --mk-primary-glow: rgba(61, 168, 120, 0.25);
-  
+
   --mk-accent-amber: #e68a4d;
   --mk-accent-amber-light: rgba(230, 138, 77, 0.15);
   --mk-accent-gold: #f4cf87;
-  
+
   --mk-accent-blue: #38a8d8;
   --mk-accent-blue-light: rgba(56, 168, 216, 0.15);
   --mk-accent-rose: #e85555;
   --mk-accent-rose-light: rgba(232, 85, 85, 0.15);
-  
+
   --mk-card-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
   --mk-card-shadow-hover: 0 12px 24px rgba(0, 0, 0, 0.5);
   --mk-glass-bg: rgba(27, 36, 32, 0.92);
@@ -83,27 +83,27 @@
     --mk-bg-subtle-solid: #202b26;
     --mk-border-color: #2e3e37;
     --mk-border-hover: #3d5248;
-    
+
     --mk-text-main: #f5efe6;
     --mk-text-heading: #ffffff;
     --mk-text-muted: #a0b2aa;
     --mk-text-subtle: #6c7f76;
-    
+
     --mk-primary: #3da878;
     --mk-primary-hover: #2e7253;
     --mk-primary-light: rgba(61, 168, 120, 0.15);
     --mk-primary-border: rgba(61, 168, 120, 0.35);
     --mk-primary-glow: rgba(61, 168, 120, 0.25);
-    
+
     --mk-accent-amber: #e68a4d;
     --mk-accent-amber-light: rgba(230, 138, 77, 0.15);
     --mk-accent-gold: #f4cf87;
-    
+
     --mk-accent-blue: #38a8d8;
     --mk-accent-blue-light: rgba(56, 168, 216, 0.15);
     --mk-accent-rose: #e85555;
     --mk-accent-rose-light: rgba(232, 85, 85, 0.15);
-    
+
     --mk-card-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
     --mk-card-shadow-hover: 0 12px 24px rgba(0, 0, 0, 0.5);
     --mk-glass-bg: rgba(27, 36, 32, 0.92);
@@ -231,9 +231,20 @@
 }
 
 @keyframes mkPulse {
-  0% { opacity: 0.4; transform: scale(0.9); }
-  50% { opacity: 1; transform: scale(1.15); }
-  100% { opacity: 0.4; transform: scale(0.9); }
+  0% {
+    opacity: 0.4;
+    transform: scale(0.9);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+
+  100% {
+    opacity: 0.4;
+    transform: scale(0.9);
+  }
 }
 
 .mk-header-controls {
@@ -565,8 +576,15 @@
 }
 
 @keyframes mkFadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Filters & Search Toolbar */
@@ -641,13 +659,16 @@
   border: 1px solid var(--mk-border-color);
   border-radius: 14px;
   padding: 1rem;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 4rem;
   box-shadow: var(--mk-card-shadow);
   transition: all 0.2s ease;
   position: relative;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 10rem;
+
+  }
 }
 
 .mk-route-card.delivered {
@@ -746,9 +767,9 @@
   align-items: center;
   justify-content: center;
   gap: 0.35rem;
-  padding: 0.45rem 0.75rem;
-  border-radius: 999px;
-  font-size: 0.78rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
   font-weight: 600;
   border: 1px solid var(--mk-border-color);
   background-color: var(--mk-bg-subtle-solid);
@@ -769,6 +790,7 @@
 }
 
 .mk-action-btn.delivered {
+  font-size: 0.75rem;
   background-color: var(--mk-primary);
   color: #FFFFFF;
   border-color: var(--mk-primary);
@@ -945,4 +967,65 @@
   justify-content: center;
   margin-bottom: 1rem;
   color: var(--mk-text-subtle);
+}
+
+.bottom-left {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+}
+
+.milk-quantity {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  background-color: var(--mk-bg-subtle-solid);
+  border: 1px solid var(--mk-border-color);
+  border-radius: 8px;
+  padding: 1px 0;
+
+  button {
+    border: none;
+    background: transparent;
+    color: var(--mk-text-main);
+    padding: 0 0.75rem;
+    cursor: pointer;
+    border-radius: 6px;
+  }
+
+  .text {
+    padding: 0 0.4rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--mk-text-main)
+  }
+}
+
+.delivery-actions .action-buttons {
+  display: flex;
+  align-items: space-between;
+  justify-content: space-between;
+
+  .buttons {
+    padding: 2px 2px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1rem;
+
+    button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.4rem 0.4rem;
+      border-radius: 999px;
+      font-size: 0.6rem;
+      font-weight: 600;
+      border: 1px solid var(--mk-border-color);
+      background-color: var(--mk-accent-gold);
+      color: var(--mk-text-main);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+  }
 }

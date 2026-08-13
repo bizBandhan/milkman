@@ -44,7 +44,6 @@ function MilkmanRoutes({ user, pravah }) {
             () => { setIsLoading(false) }
         );
     }, [user, pravah]);
-
     return useRoutes([
         {
             path: "/",
@@ -84,30 +83,6 @@ function MemberRoutes({ user, pravah }) {
 
 function VisitorRoutes({ user, pravah }) {
     return useRoutes([
-        {
-            path: "dashboard",
-            element: <Layout.Milkman user={user} pravah={pravah} />,
-            children: [
-                {
-                    path: "",
-                    element: <MilkmanDashboard user={user} pravah={pravah} />
-                },
-                {
-                    path: "*",
-                    element: <MilkmanDashboard user={user} pravah={pravah} />
-                }
-            ]
-        },
-        {
-            path: "dashboard/*",
-            element: <Layout.Milkman user={user} pravah={pravah} />,
-            children: [
-                {
-                    path: "",
-                    element: <MilkmanDashboard user={user} pravah={pravah} />
-                }
-            ]
-        },
         {
             path: "policy",
             element: <>Policy Page <Outlet /></>,

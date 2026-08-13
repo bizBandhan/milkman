@@ -19,6 +19,7 @@ import {
 
 export function DeliveryRouteTab({
   deliveries,
+  showInfo,
   onToggleStatus,
   onAdjustQty,
   onOpenDetails,
@@ -116,7 +117,7 @@ export function DeliveryRouteTab({
         )}
       </div> */}
 
-      {/* <div
+      {showInfo && <div
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -139,7 +140,7 @@ export function DeliveryRouteTab({
         <span style={{ fontWeight: '700' }}>
           {totalDelivered}/{deliveries.length} Delivered
         </span>
-      </div> */}
+      </div>}
 
       {filtered.length === 0 ? (
         <div className="mk-empty-state">
@@ -162,6 +163,7 @@ export function DeliveryRouteTab({
                 key={item.id}
                 className={`mk-route-card ${isDelivered ? 'delivered' : isSkipped ? 'skipped' : ''}`}
               >
+
                 <div className="mk-customer-info">
                   <div className="mk-avatar">{item.customerName.charAt(0)}</div>
                   <div className="mk-customer-details">
@@ -205,99 +207,69 @@ export function DeliveryRouteTab({
                     </div>
                   </div>
                 </div>
-
-                {/* Right Action Bar (Vertical on Mobile, Horizontal on Desktop) */}
-                <div className="mk-delivery-actions">
-                  {/* Quantity Adjustment Controls */}
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      backgroundColor: 'var(--mk-bg-subtle-solid)',
-                      border: '1px solid var(--mk-border-color)',
-                      borderRadius: '8px',
-                      padding: '2px'
-                    }}
+                <div className="delivery-actions">
+                  <div className="action-buttons">
+                    <div className="buttons">
+                      <button>
+                        <i className="fa-solid fa-phone" />
+                      </button>
+                      <button>
+                        <i className="fa-solid fa-lock" />
+                      </button>
+                    </div>
+                    <Quantity {...{ item, onAdjustQty }} />
+                  </div>
+                  <button
+                    type="button"
+                    className={`mk-action-btn ${isDelivered ? 'delivered' : ''}`}
+                    onClick={() => onToggleStatus(item.id, isDelivered ? 'pending' : 'delivered')}
                   >
-                    <button
-                      type="button"
-                      style={{
-                        border: 'none',
-                        background: 'transparent',
-                        color: 'var(--mk-text-main)',
-                        padding: '0.35rem 0.5rem',
-                        cursor: 'pointer',
-                        borderRadius: '6px'
-                      }}
-                      onClick={() => onAdjustQty(item.id, -0.5)}
-                      title="Decrease 0.5L"
-                    >
-                      <Minus size={14} />
-                    </button>
-                    <span
-                      style={{
-                        padding: '0 0.4rem',
-                        fontSize: '0.85rem',
-                        fontWeight: '700',
-                        color: 'var(--mk-text-main)'
-                      }}
-                    >
-                      {item.deliveredQty ?? item.quantityLiters}L
-                    </span>
-                    <button
-                      type="button"
-                      style={{
-                        border: 'none',
-                        background: 'transparent',
-                        color: 'var(--mk-text-main)',
-                        padding: '0.35rem 0.5rem',
-                        cursor: 'pointer',
-                        borderRadius: '6px'
-                      }}
-                      onClick={() => onAdjustQty(item.id, 0.5)}
-                      title="Add 0.5L Extra"
-                    >
-                      <Plus size={14} />
-                    </button>
-                  </div>
+                    {isDelivered ? (
+                      <>
+                        {/* <Check size={15} />  */}
+                        {item.updatedAt || 'Done'}
+                      </>
+                    ) : (
+                      <>Mark Delivered</>
+                    )}
+                  </button>
 
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                    {/* Primary Status Toggle Button */}
-                    <button
-                      type="button"
-                      className={`mk-action-btn ${isDelivered ? 'delivered' : ''}`}
-                      onClick={() => onToggleStatus(item.id, isDelivered ? 'pending' : 'delivered')}
-                    >
-                      {isDelivered ? (
-                        <>
-                          <Check size={15} /> {item.updatedAt || 'Done'}
-                        </>
-                      ) : (
-                        <>Delivered</>
-                      )}
-                    </button>
-
-                    {/* Skip / Paused Option */}
-                    <button
-                      type="button"
-                      className={`mk-action-btn ${isSkipped ? 'skip' : ''}`}
-                      onClick={() => onToggleStatus(item.id, isSkipped ? 'pending' : 'skipped')}
-                      title="Mark Skipped or Door Locked"
-                    >
-                      {isSkipped ? 'Skipped' : 'Skip'}
-                    </button>
-
-                    {/* WhatsApp Quick Message */}
-                    <button
-                      type="button"
-                      className="mk-action-btn whatsapp"
-                      onClick={() => onOpenWhatsApp(item)}
-                      title="Send WhatsApp confirmation"
-                    >
-                      <MessageCircle size={15} />
-                    </button>
-                  </div>
                 </div>
+                {/* <div className="mk-delivery-actions">
+                  <button
+                    type="button"
+                    className={`mk-action-btn ${isSkipped ? 'skip' : ''}`}
+                    onClick={() => onToggleStatus(item.id, isSkipped ? 'pending' : 'skipped')}
+                    title="Mark Skipped or Door Locked"
+                  >
+                    <i className="fa-solid fa-lock" />
+                  </button>
+
+                  <button
+                    type="button"
+                    className="mk-action-btn whatsapp"
+                    onClick={() => onOpenWhatsApp(item)}
+                    title="Send WhatsApp confirmation"
+                  >
+                    <MessageCircle size={15} />
+                  </button>
+                  <button
+                    type="button"
+                    className={`mk-action-btn ${isDelivered ? 'delivered' : ''}`}
+                    onClick={() => onToggleStatus(item.id, isDelivered ? 'pending' : 'delivered')}
+                  >
+                    {isDelivered ? (
+                      <>
+                        <Check size={15} /> {item.updatedAt || 'Done'}
+                      </>
+                    ) : (
+                      <>Delivered</>
+                    )}
+                  </button>
+                  <div className="bottom-left">
+                    <Quantity {...{ item, onAdjustQty }} />
+                  </div>
+                </div> */}
               </div>
             );
           })}
@@ -305,4 +277,30 @@ export function DeliveryRouteTab({
       )}
     </div>
   );
+}
+function Quantity({ item, onAdjustQty }) {
+  return <div
+    className='milk-quantity'
+
+  >
+    <button
+      type="button"
+      onClick={() => onAdjustQty(item.id, -0.5)}
+      title="Decrease 0.5L"
+    >
+      <Minus size={14} />
+    </button>
+    <span
+      className='text'
+    >
+      {item.deliveredQty ?? item.quantityLiters}L
+    </span>
+    <button
+      type="button"
+      onClick={() => onAdjustQty(item.id, 0.5)}
+      title="Add 0.5L Extra"
+    >
+      <Plus size={14} />
+    </button>
+  </div>
 }
