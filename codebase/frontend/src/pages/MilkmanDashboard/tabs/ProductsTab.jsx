@@ -71,7 +71,7 @@ export function ProductsTab({ products, deliveries, onAddProduct, onEditProduct,
 
             return (
               <div
-                key={product.id}
+                key={product._id}
                 style={{
                   backgroundColor: 'var(--mk-bg-surface)',
                   border: '1px solid var(--mk-border-color)',
@@ -135,15 +135,15 @@ export function ProductsTab({ products, deliveries, onAddProduct, onEditProduct,
                   >
                     <div>
                       <div style={{ color: 'var(--mk-text-subtle)', fontSize: '0.72rem' }}>Step Size</div>
-                      <strong style={{ color: 'var(--mk-text-main)' }}>{product.stepSize} {product.unit[0]}</strong>
+                      <strong style={{ color: 'var(--mk-text-main)' }}>{product.stepSize} {product.unit}</strong>
                     </div>
                     <div>
                       <div style={{ color: 'var(--mk-text-subtle)', fontSize: '0.72rem' }}>Min Order</div>
-                      <strong style={{ color: 'var(--mk-text-main)' }}>{product.minimumOrder} {product.unit[0]}</strong>
+                      <strong style={{ color: 'var(--mk-text-main)' }}>{product.minimumOrder} {product.unit}</strong>
                     </div>
                     <div>
                       <div style={{ color: 'var(--mk-text-subtle)', fontSize: '0.72rem' }}>Daily Cap</div>
-                      <strong style={{ color: 'var(--mk-accent-amber)' }}>{product.totalAvailability} {product.unit[0]}</strong>
+                      <strong style={{ color: 'var(--mk-accent-amber)' }}>{product.totalAvailability} {product.unit}</strong>
                     </div>
                   </div>
 
@@ -198,7 +198,7 @@ export function ProductsTab({ products, deliveries, onAddProduct, onEditProduct,
                     type="button"
                     className="mk-btn-secondary"
                     style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem', color: 'var(--mk-accent-rose)' }}
-                    onClick={() => onDeleteProduct(product.id)}
+                    onClick={() => onDeleteProduct(product._id)}
                   >
                     <Trash2 size={14} /> Delete
                   </button>

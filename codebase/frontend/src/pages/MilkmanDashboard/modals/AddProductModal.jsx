@@ -51,8 +51,8 @@ export function AddProductModal(
               name="unit"
               type="select"
               options={[
-                { label: "Litre", value: "L" },
-                { label: "Kg", value: "Kg" },
+                { label: "Litre", value: "litre" },
+                { label: "Kg", value: "kg" },
                 { label: "Packet", value: "pkt" }
               ]}
               form={form}

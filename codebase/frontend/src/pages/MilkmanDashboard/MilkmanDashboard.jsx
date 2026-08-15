@@ -50,7 +50,7 @@ export function MilkmanDashboard({ user, pravah, business }) {
 
   // Data State Initialized Empty, populated via api.get and loadData from public/data/
   const product = useApiState("/api/v1/product")
-  // const [products, setProducts] = useState([]);
+
   const [customers, setCustomers] = useState([]);
   const [deliveries, setDeliveries] = useState([]);
   const [payments, setPayments] = useState([]);
@@ -413,7 +413,9 @@ export function MilkmanDashboard({ user, pravah, business }) {
                 setModalData(prod);
                 setOpenModal("product-form");
               }}
-              onDeleteProduct={handleDeleteProduct}
+              onDeleteProduct={async id => {
+                await product.delete(id)
+              }}
             />
           )}
 
@@ -526,8 +528,8 @@ export function MilkmanDashboard({ user, pravah, business }) {
             setOpenModal(null);
             setModalData({});
           }}
-          onSubmit={(d, e) => {
-            product.add({
+          onSubmit={async (d, e) => {
+            await product.add({
               name: d.name,
               price: Number(d.price),
               stepSize: Number(d.stepSize),
@@ -535,6 +537,8 @@ export function MilkmanDashboard({ user, pravah, business }) {
               totalAvailablity: Number(d.totalAvailablity),
               unit: d.unit
             })
+            setOpenModal(null);
+            setModalData({});
           }}
           initialData={modalData}
         />

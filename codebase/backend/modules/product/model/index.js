@@ -4,10 +4,13 @@ import { MongooseModel } from "express-web-tools";
 let schema = new MongooseModel(
     "Product",
     new mongoose.Schema({
+        seller:{
+            type:String,
+            required:true
+        },
         name: {
             type: String,
             required: true,
-            unique: true,
             trim: true,
             lowercase: true
         },
@@ -39,9 +42,8 @@ let schema = new MongooseModel(
     [
         [
             {
+                seller:1,
                 name: 1,
-                unit: 1,
-                stepSize: 1
             }, {
                 unique: true
             }
