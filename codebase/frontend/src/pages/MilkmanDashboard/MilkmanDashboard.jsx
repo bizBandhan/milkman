@@ -38,7 +38,33 @@ import { DeliveryDetailsModal } from './modals/DeliveryDetailsModal';
 import { WhatsAppReminderModal } from './modals/WhatsAppReminderModal';
 
 import { api, loadData } from '../../utils';
-
+const navMenu = [
+  {
+    label: "Deliveries",
+    tab: "route",
+    icon: <Truck size={17} />
+  },
+  {
+    label: "Products",
+    tab: "products",
+    icon: <Package size={17} />
+  },
+  {
+    label: "Customers",
+    tab: "customers",
+    icon: <Users size={17} />
+  },
+  {
+    label: "Transactions",
+    tab: "ledger",
+    icon: <CreditCard size={17} />
+  },
+  {
+    label: "Settings",
+    tab: "settings",
+    icon: <Settings size={17} />
+  }
+];
 export function MilkmanDashboard({ user, pravah, business }) {
   const [theme, setTheme] = useState(() => localStorage.getItem('mk-theme') || 'system');
 
@@ -278,7 +304,7 @@ export function MilkmanDashboard({ user, pravah, business }) {
   };
 
   const routesList = Array.from(new Set(deliveries.map((d) => d.route)));
-  // return <pre>{JSON.stringify(business,null,2)}</pre>
+
   return (
     <div className="mk-dashboard-container" data-dashboard-theme={theme}>
       <div className="mk-dashboard-wrapper">
@@ -317,61 +343,18 @@ export function MilkmanDashboard({ user, pravah, business }) {
         </header>
 
         <nav className="mk-tabs-nav desktop-only">
-          <button
-            type="button"
-            className={`mk-tab-item ${activeTab === 'route' ? 'active' : ''}`}
-            onClick={() => setActiveTab('route')}
-          >
-            <Truck size={17} /> Daily Route & Swipe-Sheet ({deliveries.length})
-          </button>
-
-          <button
-            type="button"
-            className={`mk-tab-item ${activeTab === 'products' ? 'active' : ''}`}
-            onClick={() => setActiveTab('products')}
-          >
-            <Package size={17} /> Products Catalog ({product?.data?.length})
-          </button>
-
-          <button
-            type="button"
-            className={`mk-tab-item ${activeTab === 'customers' ? 'active' : ''}`}
-            onClick={() => setActiveTab('customers')}
-          >
-            <Users size={17} /> Household Directory ({customers.length})
-          </button>
-
-          <button
-            type="button"
-            className={`mk-tab-item ${activeTab === 'stock' ? 'active' : ''}`}
-            onClick={() => setActiveTab('stock')}
-          >
-            <Milk size={17} /> Stock & Crate Planning
-          </button>
-
-          <button
-            type="button"
-            className={`mk-tab-item ${activeTab === 'ledger' ? 'active' : ''}`}
-            onClick={() => setActiveTab('ledger')}
-          >
-            <CreditCard size={17} /> Ledger & Payments
-          </button>
-
-          <button
-            type="button"
-            className={`mk-tab-item ${activeTab === 'analytics' ? 'active' : ''}`}
-            onClick={() => setActiveTab('analytics')}
-          >
-            <BarChart3 size={17} /> Performance Insights
-          </button>
-
-          <button
-            type="button"
-            className={`mk-tab-item ${activeTab === 'settings' ? 'active' : ''}`}
-            onClick={() => setActiveTab('settings')}
-          >
-            <Settings size={17} /> Settings
-          </button>
+          {
+            navMenu.map(
+              menuItem => <button
+                key={menuItem.tab}
+                type="button"
+                className={`mk-tab-item ${activeTab === menuItem.tab ? 'active' : ''}`}
+                onClick={() => setActiveTab(menuItem.tab)}
+              >
+                {menuItem.icon} {menuItem.label}
+              </button>
+            )
+          }
         </nav>
 
         <main>
@@ -464,60 +447,21 @@ export function MilkmanDashboard({ user, pravah, business }) {
       </div>
 
       <nav className="mk-bottom-nav-mobile">
-        <button
-          type="button"
-          className={`mk-bottom-nav-item ${activeTab === 'route' ? 'active' : ''}`}
-          onClick={() => setActiveTab('route')}
-        >
-          <div className="mk-bottom-icon-box">
-            <Truck size={20} />
-          </div>
-          <span>Route</span>
-        </button>
-
-        <button
-          type="button"
-          className={`mk-bottom-nav-item ${activeTab === 'products' ? 'active' : ''}`}
-          onClick={() => setActiveTab('products')}
-        >
-          <div className="mk-bottom-icon-box">
-            <Package size={20} />
-          </div>
-          <span>Products</span>
-        </button>
-
-        <button
-          type="button"
-          className={`mk-bottom-nav-item ${activeTab === 'customers' ? 'active' : ''}`}
-          onClick={() => setActiveTab('customers')}
-        >
-          <div className="mk-bottom-icon-box">
-            <Users size={20} />
-          </div>
-          <span>Households</span>
-        </button>
-
-        <button
-          type="button"
-          className={`mk-bottom-nav-item ${activeTab === 'ledger' ? 'active' : ''}`}
-          onClick={() => setActiveTab('ledger')}
-        >
-          <div className="mk-bottom-icon-box">
-            <CreditCard size={20} />
-          </div>
-          <span>Ledger</span>
-        </button>
-
-        <button
-          type="button"
-          className={`mk-bottom-nav-item ${activeTab === 'settings' ? 'active' : ''}`}
-          onClick={() => setActiveTab('settings')}
-        >
-          <div className="mk-bottom-icon-box">
-            <Settings size={20} />
-          </div>
-          <span>Settings</span>
-        </button>
+        {
+          navMenu.map(
+            menuItem =>
+              <button
+                key={menuItem.tab}
+                type="button"
+                className={`mk-bottom-nav-item ${activeTab === menuItem.tab ? 'active' : ''}`}
+                onClick={() => setActiveTab(menuItem.tab)}
+              >
+                <div className="mk-bottom-icon-box">
+                  {menuItem.icon}
+                </div>
+                <span>{menuItem.label}</span>
+              </button>
+          )}
       </nav>
 
       {/* Modals & Slide-Overs */}
