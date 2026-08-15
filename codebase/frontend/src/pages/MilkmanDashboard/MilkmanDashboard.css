@@ -905,6 +905,17 @@
   box-shadow: 0 0 0 3px var(--mk-primary-light);
 }
 
+.mk-frm-row {
+  display: flex;
+
+  gap: 1rem;
+  overflow: hidden;
+  justify-content: space-between;
+  @media (max-width: 767px) {
+    flex-direction: column;
+  }
+}
+
 /* Data Table Styling */
 .mk-table-container {
   background-color: var(--mk-bg-surface);

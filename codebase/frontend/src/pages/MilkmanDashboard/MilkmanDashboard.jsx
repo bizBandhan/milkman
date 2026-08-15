@@ -40,19 +40,17 @@ import { WhatsAppReminderModal } from './modals/WhatsAppReminderModal';
 import { api, loadData } from '../../utils';
 
 export function MilkmanDashboard({ user, pravah, business }) {
-  // Theme State: 'system' | 'light' | 'dark'
-  const state1=useApiState({
-    endpoint:"/api/v1/me",
-    api
-  })
-  console.log(state1)
   const [theme, setTheme] = useState(() => localStorage.getItem('mk-theme') || 'system');
 
   // Active Tab: 'route' | 'products' | 'customers' | 'stock' | 'ledger' | 'analytics' | 'settings'
   const [activeTab, setActiveTab] = useState('products');
 
+  const [openModal, setOpenModal] = React.useState(null)
+  const [modalData, setModalData] = React.useState({});
+
   // Data State Initialized Empty, populated via api.get and loadData from public/data/
-  const [products, setProducts] = useState([]);
+  const product = useApiState("/api/v1/product")
+  // const [products, setProducts] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [deliveries, setDeliveries] = useState([]);
   const [payments, setPayments] = useState([]);
@@ -99,24 +97,7 @@ export function MilkmanDashboard({ user, pravah, business }) {
 
   // Fetch initial data from public/data/*.json using utils/api & loadData
   useEffect(() => {
-    // 1. Fetch Products
-    const savedProducts = localStorage.getItem('mk_products_data');
-    if (savedProducts) {
-      try {
-        setProducts(JSON.parse(savedProducts));
-      } catch (e) {
-        console.error(e);
-      }
-    } else {
-      loadData(
-        api.get('/data/products.json'),
-        (res) => {
-          if (Array.isArray(res)) setProducts(res);
-        },
-        () => { }
-      );
-    }
-
+    product.refresh();
     // 2. Fetch Customers
     const savedCustomers = localStorage.getItem('mk_customers_data');
     if (savedCustomers) {
@@ -172,13 +153,6 @@ export function MilkmanDashboard({ user, pravah, business }) {
     }
   }, []);
 
-  // Persistence to local storage when state updates
-  useEffect(() => {
-    if (products.length > 0) {
-      localStorage.setItem('mk_products_data', JSON.stringify(products));
-    }
-  }, [products]);
-
   useEffect(() => {
     if (customers.length > 0) {
       localStorage.setItem('mk_customers_data', JSON.stringify(customers));
@@ -197,15 +171,6 @@ export function MilkmanDashboard({ user, pravah, business }) {
     }
   }, [payments]);
 
-  // Handlers for Products Management
-  const handleSaveProduct = (productData) => {
-    if (editingProduct) {
-      setProducts((prev) => prev.map((p) => (p.id === productData.id ? productData : p)));
-      setEditingProduct(null);
-    } else {
-      setProducts((prev) => [productData, ...prev]);
-    }
-  };
 
   const handleDeleteProduct = (id) => {
     if (window.confirm('Are you sure you want to delete this product variant?')) {
@@ -290,16 +255,17 @@ export function MilkmanDashboard({ user, pravah, business }) {
   };
 
   const handleManualSync = () => {
+    product.sync();
     setIsSyncing(true);
     // Reload seed data via API
     loadData(
       Promise.all([
-        api.get('/data/products.json'),
+
         api.get('/data/customers.json'),
         api.get('/data/deliveries.json'),
         api.get('/data/payments.json')
       ]),
-      ([prodRes, custRes, delRes, payRes]) => {
+      ([custRes, delRes, payRes]) => {
         if (Array.isArray(prodRes)) setProducts(prodRes);
         if (Array.isArray(custRes)) setCustomers(custRes);
         if (Array.isArray(delRes)) setDeliveries(delRes);
@@ -364,7 +330,7 @@ export function MilkmanDashboard({ user, pravah, business }) {
             className={`mk-tab-item ${activeTab === 'products' ? 'active' : ''}`}
             onClick={() => setActiveTab('products')}
           >
-            <Package size={17} /> Products Catalog ({products.length})
+            <Package size={17} /> Products Catalog ({product?.data?.length})
           </button>
 
           <button
@@ -437,15 +403,15 @@ export function MilkmanDashboard({ user, pravah, business }) {
 
           {activeTab === 'products' && (
             <ProductsTab
-              products={products}
+              products={product.data}
               deliveries={deliveries}
               onAddProduct={() => {
-                setEditingProduct(null);
-                setIsAddProductOpen(true);
+                setOpenModal("product-form");
+                setModalData(null);
               }}
               onEditProduct={(prod) => {
-                setEditingProduct(prod);
-                setIsAddProductOpen(true);
+                setModalData(prod);
+                setOpenModal("product-form");
               }}
               onDeleteProduct={handleDeleteProduct}
             />
@@ -553,15 +519,26 @@ export function MilkmanDashboard({ user, pravah, business }) {
       </nav>
 
       {/* Modals & Slide-Overs */}
-      <AddProductModal
-        isOpen={isAddProductOpen}
-        onClose={() => {
-          setIsAddProductOpen(false);
-          setEditingProduct(null);
-        }}
-        onSave={handleSaveProduct}
-        initialData={editingProduct}
-      />
+      {
+        openModal === "product-form"
+        && <AddProductModal
+          onClose={() => {
+            setOpenModal(null);
+            setModalData({});
+          }}
+          onSubmit={(d, e) => {
+            product.add({
+              name: d.name,
+              price: Number(d.price),
+              stepSize: Number(d.stepSize),
+              minimumOrder: Number(d.minimumOrder),
+              totalAvailablity: Number(d.totalAvailablity),
+              unit: d.unit
+            })
+          }}
+          initialData={modalData}
+        />
+      }
 
       <AddCustomerModal
         isOpen={isAddCustomerOpen}
@@ -571,7 +548,7 @@ export function MilkmanDashboard({ user, pravah, business }) {
         }}
         onSave={handleSaveCustomer}
         initialData={editingCustomer}
-        products={products}
+        products={product.data}
       />
 
       <RecordPaymentModal

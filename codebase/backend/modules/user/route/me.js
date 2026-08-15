@@ -1,17 +1,11 @@
-/* 
-Resposible for following routes:
-    /me
-    /login
-    /register
-    /user
-    /user/:id
-*/
 import { Router } from "express";
 import { asyncHandler, eventStream, HttpError } from "express-web-tools";
 import { User as userController } from "../controller/index.js";
 import { isAuthenticated } from "../guard/index.js";
 import { publishEvent } from "../../../core/utils/index.js";
+
 const router = Router();
+
 router
     .route('/')
     .get(
@@ -21,7 +15,6 @@ router
             }
         )
     )
-    .post(async (req, res) => { res.json({ status: "success", message: "Not implemented" }) })
     .put(
         asyncHandler(
             async (req, res) => {
@@ -41,7 +34,6 @@ router
             }
         )
     )
-    .patch(async (req, res) => { res.json({ status: "success", message: "Not implemented" }) })
     .delete(
         asyncHandler(
             async (req, res) => {

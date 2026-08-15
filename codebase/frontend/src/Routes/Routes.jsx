@@ -10,7 +10,7 @@ export function Routes() {
     const user = useMember();
     const pravah = usePravahContext();
     const pravahState = usePravahState(pravah, "connected");
-
+    
     usePravahListener(pravah, `login-${pravahState?.pravahId}`, async () => {
         window.location.reload();
     });
