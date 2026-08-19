@@ -69,13 +69,14 @@ export function MilkmanDashboard({ user, pravah, business }) {
   const [theme, setTheme] = useState(() => localStorage.getItem('mk-theme') || 'system');
 
   // Active Tab: 'route' | 'products' | 'customers' | 'stock' | 'ledger' | 'analytics' | 'settings'
-  const [activeTab, setActiveTab] = useState('products');
+  const [activeTab, setActiveTab] = useState('customers');
 
   const [openModal, setOpenModal] = React.useState(null)
   const [modalData, setModalData] = React.useState({});
 
   // Data State Initialized Empty, populated via api.get and loadData from public/data/
   const product = useApiState("/api/v1/product")
+  const customer = useApiState("/api/v1/customer")
 
   const [customers, setCustomers] = useState([]);
   const [deliveries, setDeliveries] = useState([]);
@@ -404,16 +405,18 @@ export function MilkmanDashboard({ user, pravah, business }) {
 
           {activeTab === 'customers' && (
             <CustomerDirectoryTab
-              customers={customers}
+              customers={customer.data}
               onAddCustomer={() => {
-                setEditingCustomer(null);
-                setIsAddCustomerOpen(true);
+                setOpenModal("customer-form");
+                setModalData(null);
               }}
               onEditCustomer={(cust) => {
-                setEditingCustomer(cust);
-                setIsAddCustomerOpen(true);
+                setModalData(cust);
+                setOpenModal("customer-form");
               }}
-              onDeleteCustomer={handleDeleteCustomer}
+              onDeleteProduct={async id => {
+                await customer.delete(id)
+              }}
               onOpenWhatsApp={(cust) => setWhatsAppCustomer(cust)}
               onRecordPayment={(cust) => {
                 setSelectedPaymentCust(cust);
@@ -487,17 +490,23 @@ export function MilkmanDashboard({ user, pravah, business }) {
           initialData={modalData}
         />
       }
+      {
+        openModal === "customer-form"
+        && <AddCustomerModal
+          onClose={() => {
+            setOpenModal(null);
+            setModalData({});
+          }}
+          onSubmit={async (d, e) => {
+            await customer.add(d)
+            setOpenModal(null);
+            setModalData({});
+          }}
+          initialData={modalData}
+          products={product.data}
+        />
+      }
 
-      <AddCustomerModal
-        isOpen={isAddCustomerOpen}
-        onClose={() => {
-          setIsAddCustomerOpen(false);
-          setEditingCustomer(null);
-        }}
-        onSave={handleSaveCustomer}
-        initialData={editingCustomer}
-        products={product.data}
-      />
 
       <RecordPaymentModal
         isOpen={isRecordPaymentOpen}
