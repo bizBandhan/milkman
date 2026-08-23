@@ -498,9 +498,25 @@ export function MilkmanDashboard({ user, pravah, business }) {
             setModalData({});
           }}
           onSubmit={async (d, e) => {
-            await customer.add(d)
-            setOpenModal(null);
-            setModalData({});
+            const temp = {
+              name: d.name,
+              address: d.address,
+              user: {
+                name: d.name,
+                phone: d.phone,
+              },
+              order: {
+                product: d.product,
+                unitPrice: d.unitPrice,
+                quantity: d.quantity,
+                frequency: "daily",
+                slot: d.shift
+              }
+            }
+            console.log(temp)
+            // // await customer.add(d)
+            // setOpenModal(null);
+            // setModalData({});
           }}
           initialData={modalData}
           products={product.data}

@@ -19,7 +19,7 @@ export function AddProductModal(
     <div className="mk-modal-overlay" onClick={onClose}>
       <div className="mk-modal-card" onClick={(e) => e.stopPropagation()}>
         <div className="mk-modal-header">
-          <h3>{initialData ? 'Edit Product Item' : 'Add New Product Item'}</h3>
+          <h3>{initialData ? 'Edit Product' : 'Add New Product'}</h3>
           <button className="mk-close-btn" type="button" onClick={onClose}>
             <X size={20} />
           </button>
